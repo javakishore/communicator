@@ -15,15 +15,38 @@
 	rel="stylesheet" />
 <script type="text/javascript"
 	src="<%=request.getContextPath()%>/resources/js/jquery-1.11.3.min.js"></script>
- 
+<script type="text/javascript">
+	$(function() {
+		$('form').each(function() {
+			$("#_usrName").focus();
+			$("input#_passwd").keypress(function(event) {
+				if (event.which == 13) {
+					valdateLogin();
+				}
+			});
+		});
+	});
+	function valdateLogin() {
+		console.log('validate');
+		$('#msg').hide()
+		if ($('#userName').val() == "" || $('#password').val() == "") {
+			$('#msg').show();
+			return false
+		} else {
+			$('#frm').submit();
+
+		}
+	}
+</script>
+
 </head>
 
 <body class="login">
 	<div class="login-block">
 		<div class="addProjectform">
 			<div class="logo">
-				<a href="javascript:void(0);" title="PruBSN">
-					<img alt="PruBSN" src="resources/images/PruBSN_logo.png">
+				<a href="javascript:void(0);" title="PruBSN"> <img alt="PruBSN"
+					src="resources/images/PruBSN_logo.png">
 				</a>
 			</div>
 			<div class="clear"></div>
@@ -33,23 +56,26 @@
 					<c:if test="${!empty invalidUser}">
 						<div class="form-group">
 							<div
-								class="col-sm-offset-10 col-sm-4 alert alert-danger ErrorMessage" style="width:300px">
-								<span style="width:300px">${invalidUser}</span>
+								class="col-sm-offset-10 col-sm-4 alert alert-danger ErrorMessage"
+								style="width: 300px">
+								<span style="width: 300px">${invalidUser}</span>
 							</div>
 						</div>
 					</c:if>
-					
-					<div class="form-group" id="msg" style="display:none">
-							<div
-								class="col-sm-offset-10 col-sm-4 alert alert-danger ErrorMessage" style="width:300px">
-								<span style="width:300px">Enter credentials </span>
-							</div>
+
+					<div class="form-group" id="msg" style="display: none">
+						<div
+							class="col-sm-offset-10 col-sm-4 alert alert-danger ErrorMessage"
+							style="width: 300px">
+							<span style="width: 300px">Enter credentials </span>
 						</div>
-						
+					</div>
+
 					<div class="form-group">
-						
+
 						<div class="form-item">
-							<form:input path="userName" cssClass="form-control" placeholder="Username" />
+							<form:input path="userName" cssClass="form-control"
+								placeholder="Username" id="_usrName" />
 							<div class="col-sm-10">
 								<form:errors path="userName"
 									cssClass="alert alert-danger ErrorMessage" />
@@ -57,16 +83,17 @@
 						</div>
 					</div>
 					<div class="form-group">
-						
+
 						<div class="form-item">
-							<form:password path="password" cssClass="form-control" placeholder="Password" />
+							<form:password path="password" cssClass="form-control"
+								placeholder="Password" id="_passwd" />
 							<div class="col-sm-10">
 								<form:errors path="password"
-									cssClass="alert alert-danger ErrorMessage"  />
+									cssClass="alert alert-danger ErrorMessage" />
 							</div>
 						</div>
 					</div>
-					
+
 					<!-- <div class="form-group lang-box">
 						<span>Language</span> 
 						<select name="category">
@@ -74,14 +101,15 @@
 							<option value="bhasa">Bhasa</option>
 						</select>
 					</div> -->
-	
+
 					<div class="form-group">
 						<div class="col-sm-12 btn-box">
-							<button type="button" onclick="valdateLogin()" class="btn btn-lg btn-block btn-login">Login</button>
+							<button type="button" onclick="valdateLogin()"
+								class="btn btn-lg btn-block btn-login">Login</button>
 						</div>
 					</div>
-				
-				<%--	<div class="form-group register">
+
+					<%--	<div class="form-group register">
 						<div class="col-sm-12">
 							<a href="/crm/register">Register Here</a>
 						</div>
@@ -111,13 +139,13 @@
 	
 						</div>
 					</div>  --%>
-	
-	
+
+
 				</form:form>
 			</div>
 		</div>
 	</div>
-	
-	
+
+
 </body>
 </html>

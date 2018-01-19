@@ -26,7 +26,7 @@ public class AuthenticationFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 		HttpSession session = req.getSession(false);
 		String uri = req.getRequestURI();
-		System.out.println("AuthenticationFilter >> URI:[" + uri + "] Session:[" + session + "]");
+		///System.out.println("AuthenticationFilter >> URI:[" + uri + "] Session:[" + session + "]");
 
 		User user = null;
 
@@ -45,7 +45,12 @@ public class AuthenticationFilter implements Filter {
 			
 			chain.doFilter(request, response);
 			
-		} else if (user == null && !uri.contains("login") && !uri.equals("/crmCmsAdmin/")) {
+		}else if( req.getMethod().equalsIgnoreCase("GET") && (uri.equals("/crmCmsAdmin/login") || uri.equals("/crmCmsAdmin/login/")) ) {
+			
+			req.setAttribute("invalidUser", "Session expired or Unauthorized access. Please login to the application");
+			req.getRequestDispatcher("/").forward(req, resp);
+			
+		}else if (user == null && !uri.contains("login") && !uri.equals("/crmCmsAdmin/")) {
 			
 			req.setAttribute("invalidUser", "Session expired or Unauthorized access. Please login to the application");
 			req.getRequestDispatcher("/").forward(req, resp);
