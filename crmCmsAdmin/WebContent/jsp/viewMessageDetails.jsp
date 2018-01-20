@@ -283,97 +283,22 @@ $(document).ready(function(){
 						<form:form name="addmessage" action="editmessage" method="post"
 							commandName="message" enctype="multipart/form-data"
 							cssClass="form-horizontal" onSubmit="return validateForm()">
-							<%-- <div class="form-group">
-								<label class="control-label col-sm-2">Zone :</label>
-								<div class="col-sm-5">
-
-									 <select name="zone" class="form-control" multiple="multiple" readonly="readonly">
-										<option>All</option>
-										<option>North </option>
-										<option>east</option>
-										<option>west</option>
-										<option>south</option>
-									</select>
-									<form:select path="category.categoryId" cssClass="form-control"
-										id="categoryId">
-										<form:option value=""></form:option>
-										<c:if test="${!empty categoryList}">
-											<c:forEach items="${categoryList}" var="category">
-												<form:option value="${category.categoryId}">${category.categoryName}</form:option>
-											</c:forEach>
-										</c:if>
-									</form:select>
-									<form:errors path="category.categoryId"
-										cssClass="alert alert-danger ErrorMessage" />
-
-								</div>
-							</div> --%>
-							<%-- <div class="form-group">
-								<label class="control-label col-sm-2">Channel :</label>
-								<div class="col-sm-5">
-
-									 <select name="channel" class="form-control" multiple="multiple" readonly="readonly">
-										<option>All</option>
-										<option>PBTB agents</option>
-										<option>PBTB leaders</option>
-										<option>PAMB agents</option>
-										<option>PAMB leaders</option>
-									</select>
-									<form:select path="category.categoryId" cssClass="form-control"
-										id="categoryId">
-										<form:option value=""></form:option>
-										<c:if test="${!empty categoryList}">
-											<c:forEach items="${categoryList}" var="category">
-												<form:option value="${category.categoryId}">${category.categoryName}</form:option>
-											</c:forEach>
-										</c:if>
-									</form:select>
-									<form:errors path="category.categoryId"
-										cssClass="alert alert-danger ErrorMessage" />
-
-								</div>
-							</div> --%>
-
 
 							<div class="form-group">
 								<label class="control-label col-sm-2">Category :</label>
-
 								<div class="col-sm-5">
-
-
-
-
 									<input style="background-color: #d3d3d3;" name="category"
 										class="form-control" value="${categoryName}"
 										readonly="readonly" />
-
-
-									<%-- <select id="categoryId" class="form-control"
-										name="category.categoryId">
-										<option value="">Select category</option>
-										<c:forEach items="${categoryList}" var="category">
-
-											<c:choose>
-												<c:when
-													test="${category.categoryId == messageEng.category_Id}">
-													<option value="${category.categoryId}" selected  readonly="readonly">
-														${category.categoryName}</option>
-												</c:when>
-												<c:otherwise>
-													<option value="${category.categoryId}" selected>
-														${category.categoryName}</option>
-												</c:otherwise>
-											</c:choose>
-
-
-										</c:forEach>
-									</select> --%>
-
-
-
 								</div>
 							</div>
-
+							<div class="form-group">
+								<label class="control-label col-sm-2">Reference No:</label>
+								<div class="col-sm-5">
+									<input type="text" value="${referenceNo}"
+										readonly="readonly" class="form-control" />
+								</div>
+							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2">English :</label>
 							</div>

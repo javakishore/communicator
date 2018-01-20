@@ -13,7 +13,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-//@Table(name="category_message")
 @Table
 public class Message {
 	@Id
@@ -27,8 +26,6 @@ public class Message {
 	@JoinColumn(name="categoryId")
 	private Category category;
 	
-
-	//
 	public String msgDetailID = "";
 	public String msgID = "";
 	public String msgData = "";
@@ -49,6 +46,10 @@ public class Message {
 	public String isDelete;
 	public String favoriteid;
 	public String region;
+	private String channelName;
+	@Column(name="REFERENCE_NO")
+	private String referenceNo;
+	
 	public String getRegion() {
 		return region;
 	}
@@ -184,19 +185,6 @@ public class Message {
 		this.creationDate=creationDate;
 	}
 
-	//edit msgs
-	/*public Message(String MsgDetailID ,String MsgID,String msgData,String MsgTitle,
-			String MsgLink,String msgLink2,String effectiveDate,String expiryDate,String category_Id) {
-		super();
-		this.msgDetailID=MsgDetailID;
-		this.msgID=MsgID;
-		this.msgData=msgData;
-		this.msgTitle=MsgTitle;
-		this.msgLink=MsgLink;
-		this.msgLink2=msgLink2;
-		this.effectiveDate=effectiveDate;
-		this.expiryDate=expiryDate;
-		this.category_Id=category_Id;*/
 	public Message(String MsgDetailID ,String MsgID,String msgData,String MsgTitle,
 			String MsgLink,String msgLink2,String effectiveDate,String expiryDate,String category_Id,ArrayList<String> zone, ArrayList<String> channel) {
 		super();
@@ -297,14 +285,6 @@ public class Message {
 	}
 
 
-	/*public Integer getMessageId() {
-		return messageId;
-	}
-
-	public void setMessageId(Integer messageId) {
-		this.messageId = messageId;
-	}*/
-
 	public String getMessageName() {
 		return messageName;
 	}
@@ -368,5 +348,17 @@ public class Message {
 	public ArrayList<String> getChannel()
 	{
 		return this.channel;
+	}
+	public String getChannelName() {
+		return channelName;
+	}
+	public void setChannelName(String channelName) {
+		this.channelName = channelName;
+	}
+	public String getReferenceNo() {
+		return referenceNo;
+	}
+	public void setReferenceNo(String referenceNo) {
+		this.referenceNo = referenceNo;
 	}
 }

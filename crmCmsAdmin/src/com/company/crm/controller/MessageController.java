@@ -595,119 +595,75 @@ public class MessageController {
 		Connection conn = null;
 		try {
 			conn = DBConnection.getConnection();
-
-			// String sql1 =
-			// "SELECT M.*, MD.*, C.CATEGORYNAME FROM MESSAGE M,MESSAGE_DETAILS MD,CATEGORY C WHERE C.CATEGORYID = M.CATEGORY_ID AND MD.MESSAGE_ID= "
-			// + id
-			// + " AND M.MESSAGE_ID = " + id;
 			String sql1 = "SELECT M.MESSAGE_ID, M.CREATED_AT,M.EXPIRY_AT,M.CATEGORY_ID,M.USERNAME,M.IS_DELETED,M.IS_EDITED,M.MSG_STATUS, MD.MESSAGE_DETAIL_ID, "
-					+ " MD.MESSAGE_DATA,MD.MESSAGE_TITLE, MD.MESSAGE_LANG,MD.MESSAGE_LINK,MD.MESSAGE_IMG_LINK, C.CATEGORYNAME FROM MESSAGE M,MESSAGE_DETAILS MD,CATEGORY C WHERE C.CATEGORYID = M.CATEGORY_ID AND MD.MESSAGE_ID= "
-					+ id + " AND M.MESSAGE_ID = " + id;
-			// SELECT M.MESSAGE_ID,to_char(M.CREATED_AT, 'dd-MM-yyyy
-			// HH24:MI:SS.FF'),to_char(M.EXPIRY_AT, 'dd-MM-yyyy
-			// HH24:MI:SS.FF'),M.CATEGORY_ID,MD.* FROM MESSAGE M,MESSAGE_DETAILS
-			// MD WHERE MD.MESSAGE_ID= 360 AND M.MESSAGE_ID = 360;
-			// String sql1 =
-			// "SELECT M.MESSAGE_ID,to_char(M.CREATED_AT, 'dd-MM-yyyy HH24:MI:SS.FF'),to_char(M.EXPIRY_AT, 'dd-MM-yyyy HH24:MI:SS.FF'),,M.CATEGORY_ID,MD.* FROM MESSAGE M,MESSAGE_DETAILS MD WHERE MD.MESSAGE_ID= "+id+"  AND M.MESSAGE_ID = "+id;
-
+					+ " MD.MESSAGE_DATA,MD.MESSAGE_TITLE, MD.MESSAGE_LANG,MD.MESSAGE_LINK,MD.MESSAGE_IMG_LINK, C.CATEGORYNAME,M.REFERENCE_NO "
+					+ " FROM MESSAGE M,MESSAGE_DETAILS MD,CATEGORY C WHERE C.CATEGORYID = M.CATEGORY_ID AND MD.MESSAGE_ID= "+ id + " AND M.MESSAGE_ID = " + id;
+			System.out.println("GET >> viewMessage >> SQL:["+sql1+"]");
 			Statement stmt = conn.createStatement();
 			ResultSet resultSet = stmt.executeQuery(sql1);
 			List<Message> messageArray = new ArrayList<Message>();
 			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 			while (resultSet.next()) {
-				String message_id = String.valueOf(resultSet
-						.getInt("MESSAGE_ID"));
-				String created_date = ""
-						+ dateFormat.format(resultSet
-								.getTimestamp("CREATED_AT"));
-				// String created_date = "" +
-				// resultSet.getTimestamp("CREATED_AT");
-				String expiry_date = ""
-						+ ""
-						+ dateFormat
-								.format(resultSet.getTimestamp("EXPIRY_AT"));
-				// String expiry_date = "" +
-				// resultSet.getTimestamp("EXPIRY_AT");
-				String category_Id = String.valueOf(resultSet
-						.getInt("CATEGORY_ID"));
-				String message_detail_Id = String.valueOf(resultSet
-						.getInt("MESSAGE_DETAIL_ID"));
-				String message_Id = String.valueOf(resultSet
-						.getInt("MESSAGE_ID"));
+				String message_id = String.valueOf(resultSet.getInt("MESSAGE_ID"));
+				String created_date = "" + dateFormat.format(resultSet.getTimestamp("CREATED_AT"));
+				String expiry_date = "" + "" + dateFormat.format(resultSet.getTimestamp("EXPIRY_AT"));
+
+				String category_Id = String.valueOf(resultSet.getInt("CATEGORY_ID"));
+				String message_detail_Id = String.valueOf(resultSet.getInt("MESSAGE_DETAIL_ID"));
+				String message_Id = String.valueOf(resultSet.getInt("MESSAGE_ID"));
 				String message_data = resultSet.getString("MESSAGE_DATA");
 				String message_title = resultSet.getString("MESSAGE_TITLE");
 				String message_link = resultSet.getString("MESSAGE_LINK");
-				String message_img_link = resultSet
-						.getString("MESSAGE_IMG_LINK");
-
-				categoryName = String.valueOf(resultSet
-						.getString("CATEGORYNAME"));
+				String message_img_link = resultSet.getString("MESSAGE_IMG_LINK");
+			    String refNo = resultSet.getString("REFERENCE_NO");
+				categoryName = String.valueOf(resultSet.getString("CATEGORYNAME"));
 				System.out.println("category name>>>>>>>>>>" + categoryName);
+				
 				String base64DataString = "";
 				if (!category_Id.equals("6")) {
 					if (message_img_link != null) {
 
 						if (message_img_link.length() > 0) {
+							try {
+								File encFile = new File(base + File.separator + UploadFolder + message_img_link);
+								// Sudd Added Code for Android without Encryption
+								File androidFile = new File(
+										base + File.separator + UploadFolderAndroid + message_img_link);
 
-							File encFile = new File(base + File.separator
-									+ UploadFolder + message_img_link);
-							// Sudd Added Code for Android without Encryption
-							File androidFile = new File(base + File.separator
-									+ UploadFolderAndroid + message_img_link);
+								int rsize = (int) encFile.length();
+								// for Android
+								int rsizeAndroid = (int) androidFile.length();
+								byte[] bytes = new byte[rsize];
+								// For ANdroid
+								byte[] bytesAndroid = new byte[rsizeAndroid];
+								FileInputStream fis = new FileInputStream(encFile);
+								// For Android
+								FileInputStream fisAndroid = new FileInputStream(androidFile);
+								fis.read(bytes);
+								// For ANdroid
+								fis.read(bytesAndroid);
+								fis.close();
 
-							int rsize = (int) encFile.length();
-							// for Android
-							int rsizeAndroid = (int) androidFile.length();
-							byte[] bytes = new byte[rsize];
-							// For ANdroid
-							byte[] bytesAndroid = new byte[rsizeAndroid];
-							FileInputStream fis = new FileInputStream(encFile);
-							// For Android
-							FileInputStream fisAndroid = new FileInputStream(
-									androidFile);
-							fis.read(bytes);
-							// For ANdroid
-							fis.read(bytesAndroid);
-							fis.close();
-
-							AES256JNCryptor cryptor;
-							// JNCryptor cryptor=new AES256JNCryptor();
-							// BASE64Encoder base64encoder = new
-							// BASE64Encoder();
-							// byte[] decryptdata=base64encoder.decode(bytes);
-
-							// byte[] encodeBase64 =
-							// Base64.encodeBase64(decryptdata);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 
 						}
 					}
 				}
 
-				String message_lang = String.valueOf(resultSet
-						.getInt("MESSAGE_LANG"));
-				// String message_status =
-				// String.valueOf(resultSet.getInt("MESSAGE_STATUS"));
-				/*
-				 * messageArray.add(new Message(message_detail_Id, message_id,
-				 * message_data, message_title, message_link, message_img_link,
-				 * created_date, expiry_date, category_Id));
-				 */
-				messageArray.add(new Message(message_detail_Id, message_id,
-						message_data, message_title, message_link,
-						base64DataString, created_date, expiry_date,
-						categoryName));
+				String message_lang = String.valueOf(resultSet.getInt("MESSAGE_LANG"));
+				Message msgObj = new Message(message_detail_Id, message_id, message_data, message_title, message_link,
+						base64DataString, created_date, expiry_date, categoryName);
+				msgObj.setReferenceNo(refNo);
+				messageArray.add(msgObj);
 				model.addAttribute("categoryId", category_Id);
 
 			}
 			model.addAttribute("messageData", messageArray.get(0).getMsgData());
-
-			// session.setAttribute("messageEng", messageArray.get(0));
-			// session.setAttribute("messageBha", messageArray.get(1));
 			model.addAttribute("messageEng", messageArray.get(0));
 			model.addAttribute("messageBha", messageArray.get(0));
-			// model.addAttribute("categoryName", categoryName);
-
-			model.addAttribute("categoryName", categoryName);
+			model.addAttribute("referenceNo",messageArray.get(0).getReferenceNo());
 
 		} catch (ClassNotFoundException e) {
 			
@@ -1763,12 +1719,16 @@ public class MessageController {
 			String sql="";
 			 if(strUserName.equalsIgnoreCase("admin") || strUserName.equalsIgnoreCase("banca")){
 				 
-				 sql = "SELECT md.MESSAGE_DETAIL_ID ,  md.MESSAGE_ID,  md.MESSAGE_TITLE,  md.MESSAGE_DATA,  md.MESSAGE_LINK,  md.MESSAGE_IMG_LINK,  c.CATEGORYNAME,  m.MSG_STATUS FROM message_details md INNER JOIN MESSAGE m ON md.message_id = m.message_id INNER JOIN category c ON m.category_id   =c.categoryId left join message_channel mc on mc.message_id=md.message_id left join channel cn on cn.channelid=mc.channel_id WHERE m.IS_DELETED =0 AND md.MESSAGE_LANG=1  "
+				 sql = "SELECT md.MESSAGE_DETAIL_ID ,  md.MESSAGE_ID,  md.MESSAGE_TITLE,  md.MESSAGE_DATA,  md.MESSAGE_LINK,  md.MESSAGE_IMG_LINK,  c.CATEGORYNAME,  m.MSG_STATUS,to_char(m.created_at,'yyyy-mm-dd hh24:mm:ss') created_date,M.REFERENCE_NO, "
+						 +"(select LISTAGG(c.channelname,',') WITHIN GROUP(ORDER BY MC.CHANNEL_ID)  from message_channel MC,CHANNEL C WHERE mc.channel_id = c.channelid AND MESSAGE_ID = m.message_id) CHANNEL_NAME"
+				 		+ " FROM message_details md INNER JOIN MESSAGE m ON md.message_id = m.message_id INNER JOIN category c ON m.category_id   =c.categoryId left join message_channel mc on mc.message_id=md.message_id left join channel cn on cn.channelid=mc.channel_id WHERE m.IS_DELETED =0 AND md.MESSAGE_LANG=1  "
 				 		+ " and c.username ='"+ strUserName +"'"
 				 		+ " ORDER BY md.MESSAGE_ID desc";
 			 }
 			 else{
-				 sql = "SELECT  md.MESSAGE_DETAIL_ID ,md.MESSAGE_ID,md.MESSAGE_TITLE,md.MESSAGE_DATA,md.MESSAGE_LINK,md.MESSAGE_IMG_LINK,c.CATEGORYNAME,m.MSG_STATUS FROM message_details md inner join message m on md.message_id = m.message_id inner join category c on m.category_id=c.categoryId where m.IS_DELETED=0  and md.MESSAGE_LANG=1 ORDER BY md.MESSAGE_ID desc";
+				 sql = "SELECT  md.MESSAGE_DETAIL_ID ,md.MESSAGE_ID,md.MESSAGE_TITLE,md.MESSAGE_DATA,md.MESSAGE_LINK,md.MESSAGE_IMG_LINK,c.CATEGORYNAME,m.MSG_STATUS,to_char(m.created_at,'yyyy-mm-dd hh24:mm:ss') created_date,M.REFERENCE_NO, "
+						+" (select LISTAGG(c.channelname,',') WITHIN GROUP(ORDER BY MC.CHANNEL_ID)  from message_channel MC,CHANNEL C WHERE mc.channel_id = c.channelid AND MESSAGE_ID = m.message_id) CHANNEL_NAME"
+				 		+ " FROM message_details md inner join message m on md.message_id = m.message_id inner join category c on m.category_id=c.categoryId where m.IS_DELETED=0  and md.MESSAGE_LANG=1 ORDER BY md.MESSAGE_ID desc";
 			 }
 			System.out.println("GET >> mymessages >> SQL:["+sql+"]");		
 			Statement stmt = conn.createStatement();
@@ -1779,26 +1739,29 @@ public class MessageController {
 				JNCryptor cryptor = new AES256JNCryptor();
 				String password = "aes123";
 
-				// String enc1 =
-				// String.valueOf(resultSet.getInt("MESSAGE_DETAIL_ID"));
 				String msgID = String.valueOf(resultSet.getInt("MESSAGE_ID"));
 				String msgData = resultSet.getString("MESSAGE_DATA");
 				String msgTitle = resultSet.getString("MESSAGE_TITLE");
 				String msgLink = resultSet.getString("MESSAGE_LINK");
 				String msgLink2 = resultSet.getString("MESSAGE_IMG_LINK");
-				// String enc7 =
-				// String.valueOf(resultSet.getInt("MESSAGE_STATUS"));
-				String categoryName = String.valueOf(resultSet
-						.getString("CATEGORYNAME"));
+				String categoryName = String.valueOf(resultSet.getString("CATEGORYNAME"));
+				String refNo = resultSet.getString("REFERENCE_NO");
+				String channelName = resultSet.getString("CHANNEL_NAME");
+				String creationDate = resultSet.getString("created_date");
 
 				// String MsgDetailID ,String MsgID,String msgData,String
 				// MsgTitle,String MsgLink,String msgStatus
 				if (messageList.size() == 0) {
-					messageList.add(new Message(msgID, msgData, msgTitle,
+					Message msgObj = new Message(msgID, msgData, msgTitle,
 							msgLink, String.valueOf(
 									resultSet.getInt("MSG_STATUS"))
 									.equalsIgnoreCase("0") ? "Pending"
-									: "Approved", msgLink2, categoryName));
+									: "Approved", msgLink2, categoryName);
+					msgObj.setReferenceNo(refNo);
+					msgObj.setCreationDate(creationDate);
+					msgObj.setChannelName(channelName);
+					
+					messageList.add(msgObj);
 				}
 				boolean flagToadd = true;
 				for (int i = 0; i < messageList.size(); i++) {
@@ -1808,11 +1771,16 @@ public class MessageController {
 					}
 				}
 				if (flagToadd) {
-					messageList.add(new Message(msgID, msgData, msgTitle,
+					Message msgObj = new Message(msgID, msgData, msgTitle,
 							msgLink, String.valueOf(
 									resultSet.getInt("MSG_STATUS"))
 									.equalsIgnoreCase("0") ? "Pending"
-									: "Approved", msgLink2, categoryName));
+									: "Approved", msgLink2, categoryName);
+					msgObj.setReferenceNo(refNo);
+					msgObj.setCreationDate(creationDate);
+					msgObj.setChannelName(channelName);
+					
+					messageList.add(msgObj);
 				}
 
 			}
@@ -1851,78 +1819,9 @@ public class MessageController {
 
 			User user1 = (User) session.getAttribute("user");
 			String strUserName=user1.getUserName();
-			// SELECT a.*,c.CATEGORYNAME FROM message_details a, message
-			// b,category c where b.IS_DELETED=0 and a.message_id = b.message_id
-			// and b.category_id=c.categoryId and a.MESSAGE_LANG=1 and
-			// b.username =2 and b.EXPIRY_AT>=SYSDATE ORDER BY b.CREATED_AT desc
-			// String
-			// sql="SELECT a.*,c.CATEGORYNAME FROM message_details a, message b,category c where b.IS_DELETED=0 and a.message_id = b.message_id and b.category_id=c.categoryId and a.MESSAGE_LANG=1 and  b.username ="+String.valueOf(user.getUserId())+"  and b.EXPIRY_AT>=SYSDATE ORDER BY b.CREATED_AT desc";
-
-			/*
-			 * SELECT a.*,c.CATEGORYNAME,b.MSG_STATUS,b.ZONE, b.CHANNEL FROM
-			 * message_details a, message b,category c where b.IS_DELETED=0 and
-			 * a.message_id = b.message_id and b.category_id=c.categoryId and
-			 * a.MESSAGE_LANG=1 and b.username =3 and b.EXPIRY_AT>=SYSDATE and
-			 * b.zone In(select ZONE_ID from USER_ZONE where user_ID=3) and
-			 * b.CHANNEL IN(select CHANNEL_ID from USER_CHANNEL where user_ID=3)
-			 * ORDER BY b.CREATED_AT desc;
-			 */
-			/*
-			 * String sql=
-			 * "SELECT a.*,c.CATEGORYNAME,b.MSG_STATUS FROM message_details a, message b,category c where b.IS_DELETED=0 and a.message_id = b.message_id and b.category_id=c.categoryId and a.MESSAGE_LANG=1 and  b.username ="
-			 * +String.valueOf(user.getUserId()) +
-			 * "  and b.EXPIRY_AT>=SYSDATE and b.zone In(select ZONE_ID from USER_ZONE where user_ID="
-			 * +String.valueOf(user.getUserId()) +
-			 * ") and b.CHANNEL IN(select CHANNEL_ID from USER_CHANNEL where user_ID="
-			 * +String.valueOf(user.getUserId())
-			 * +") ORDER BY b.CREATED_AT desc";
-			 */
-			/*
-			 * String sql=
-			 * "SELECT a.*,c.CATEGORYNAME,b.MSG_STATUS,mz.ZONE_ID FROM message_details a, message b,category c,MESSAGE_ZONE mz "
-			 * + " where b.IS_DELETED=0 and a.message_id = b.message_id " +
-			 * " and b.MESSAGE_ID=mz.MESSAGE_ID and mz.ZONE_ID IN (select ZONE_ID from USER_ZONE where USER_ID="
-			 * +String.valueOf(user.getUserId())+") " +
-			 * " and b.category_id=c.categoryId and a.MESSAGE_LANG=1 " +
-			 * " and  b.username ="+String.valueOf(user.getUserId())+
-			 * " and b.EXPIRY_AT>=SYSDATE ORDER BY b.CREATED_AT desc";
-			 */
-			/*
-			 * String sql=
-			 * "SELECT  md.MESSAGE_DETAIL_ID ,md.MESSAGE_ID,md.MESSAGE_TITLE,md.MESSAGE_DATA,md.MESSAGE_LINK,md.MESSAGE_IMG_LINK,c.CATEGORYNAME,m.MSG_STATUS,mz.ZONE_ID,mc.CHANNEL_ID"
-			 * +
-			 * " FROM message_details md, message m,category c ,MESSAGE_ZONE mz,MESSAGE_CHANNEL mc"
-			 * +
-			 * " where m.IS_DELETED=0 and md.message_id = m.message_id and m.category_id=c.categoryId and md.MESSAGE_LANG=1 and  m.username ="
-			 * +String.valueOf(user.getUserId()) +
-			 * " and mz.Z hONE_ID IN(Select USER_ZONE.ZONE_ID from USER_ZONE where USER_ZONE.USER_ID="
-			 * +
-			 * String.valueOf(user.getUserId())+") and m.MESSAGE_ID=mz.MESSAGE_ID"
-			 * +
-			 * " and mc.CHANNEL_ID IN (SELECT USER_CHANNEL.CHANNEL_ID from USER_CHANNEL where USER_CHANNEL.USER_ID = "
-			 * +
-			 * String.valueOf(user.getUserId())+") and mc.MESSAGE_ID=m.MESSAGE_ID"
-			 * +" and m.EXPIRY_AT>=SYSDATE ORDER BY m.CREATED_AT desc";
-			 */
+			
 			String sql="";
 			 if(strUserName.equalsIgnoreCase("admin") || strUserName.equalsIgnoreCase("banca")){
-			/* sql = "SELECT  distinct md.MESSAGE_ID,md.MESSAGE_TITLE,"
-					+ "  (select count(r.message_id) from read_reciept r where md.message_id = r.message_id  )as readcount ,"
-					// +" where m.IS_DELETED=0 "
-					//+ "(select count(l.message_id) from favourite f where md.message_id = f.message_id  )as likecount, "
-					+ "(select count(f.message_id) from favourite f where f.message_id= md.message_id  )as favcount, "
-					
-					// +" and f.message_id=l.MESSAGE_ID "
-					+ " (select count(l.message_id) from message_like l where md.message_id = l.message_id  )as likecount "
-					+ "FROM message_details md, read_reciept r, favourite f,message m,user_m u,message_like l,message_channel mc,channel cn"
-					+ " where md.message_id = r.message_id (+)"
-					+ "and md.message_id =f.message_id (+) "
-					+ "and md.message_id =l.message_id (+) "
-					+ "and m.message_id = md.message_id (+) "
-					+ "and u.userid = m.username (+) "
-					+ "and mc.message_id=md.message_id (+) "
-					+ "and cn.channelid=mc.channel_id (+) "
-					+ "and md.MESSAGE_LANG=1 and cn.username = '"+strUserName+"' order by md.message_id";*/
 				 
 				 sql = "SELECT  distinct md.MESSAGE_ID,md.MESSAGE_TITLE,"
 							+ "  (select count(r.message_id) from read_reciept r where md.message_id = r.message_id  )as readcount ,"
@@ -1931,21 +1830,6 @@ public class MessageController {
 							+ "FROM message_details md, message_channel mc,channel cn where mc.message_id=md.message_id and cn.channelid=mc.channel_id "
 							+ "and md.MESSAGE_LANG=1 and cn.username = '"+strUserName+"' order by md.message_id desc";
 			 }else{
-				/* sql = "SELECT  distinct md.MESSAGE_ID,md.MESSAGE_TITLE,"
-							+ "  (select count(r.message_id) from read_reciept r where md.message_id = r.message_id  )as readcount ,"
-							// +" where m.IS_DELETED=0 "
-							//+ "(select count(l.message_id) from favourite f where md.message_id = f.message_id  )as likecount, "
-							+ "(select count(f.message_id) from favourite f where f.message_id= md.message_id  )as favcount, "
-							
-							// +" and f.message_id=l.MESSAGE_ID "
-							+ " (select count(l.message_id) from message_like l where md.message_id = l.message_id  )as likecount "
-							+ "FROM message_details md, read_reciept r, favourite f,message m,user_m u,message_like l "
-							+ " where md.message_id = r.message_id (+)"
-							+ "and md.message_id =f.message_id (+) "
-							+ "and md.message_id =l.message_id (+) "
-							+ "and m.message_id = md.message_id (+) "
-							+ "and u.userid = m.username (+) "
-							+ "and md.MESSAGE_LANG=1 order by md.message_id";*/
 				 sql = "SELECT  distinct md.MESSAGE_ID,md.MESSAGE_TITLE,"
 							+ "  (select count(r.message_id) from read_reciept r where md.message_id = r.message_id  )as readcount ,"
 							+ "(select count(f.message_id) from favourite f where f.message_id= md.message_id  )as favcount, "
@@ -1960,29 +1844,14 @@ public class MessageController {
 
 			while (resultSet.next()) {
 
-				// JNCryptor cryptor = new AES256JNCryptor();
-				// String password = "aes123";
-
-				// String enc1 =
-				// String.valueOf(resultSet.getInt("MESSAGE_DETAIL_ID"));
 				String msgID = String.valueOf(resultSet.getInt("MESSAGE_ID"));
-				//System.out.println("admin inside messagesStatus msgID "+msgID  );
-
-				// String msgData = resultSet.getString("MESSAGE_DATA");
 				String msgTitle = resultSet.getString("MESSAGE_TITLE");
-				// String msgLink = resultSet.getString("MESSAGE_LINK");
-				// String msgLink2 = resultSet.getString("MESSAGE_IMG_LINK");
-				// String enc7 =
-				// String.valueOf(resultSet.getInt("MESSAGE_STATUS"));
-				// String categoryName =
-				// String.valueOf(resultSet.getString("CATEGORYNAME"));
 				String readcount = resultSet.getString("readcount");
 				String likecount = resultSet.getString("likecount");
 				String favoritecount = resultSet.getString("favcount");
 				//if(msgID.equals("89"))
 				System.out.println("admin inside messagesStatus favoritecount "+favoritecount+" msgid "+msgID  );
 				
-				// String MsgDetailID ,String MsgID,String msgData,String
 				// MsgTitle,String MsgLink,String msgStatus
 				if (messageList.size() == 0) {
 					messageList.add(new MessageStatus(msgID, msgTitle,
@@ -2003,16 +1872,6 @@ public class MessageController {
 					
 				}
 
-				/*
-				 * messageList.add(new Message( msgID, msgData, msgTitle,
-				 * msgLink,
-				 * String.valueOf(resultSet.getInt("MSG_STATUS")).equalsIgnoreCase
-				 * ("0") ? "Pending" : "Approved", msgLink2,categoryName));
-				 */
-				// messageList.add(new
-				// Message(String.valueOf(resultSet.getInt(1)),
-				// String.valueOf(resultSet.getInt(2)), resultSet.getString(3),
-				// resultSet.getString(4), resultSet.getString(5)));
 			}
 			stmt=null;
 			resultSet=null;
@@ -2097,16 +1956,6 @@ public class MessageController {
 					model.addAttribute("messageList", messageList);
 				}
 
-				/*
-				 * messageList.add(new Message( msgID, msgData, msgTitle,
-				 * msgLink,
-				 * String.valueOf(resultSet.getInt("MSG_STATUS")).equalsIgnoreCase
-				 * ("0") ? "Pending" : "Approved", msgLink2,categoryName));
-				 */
-				// messageList.add(new
-				// Message(String.valueOf(resultSet.getInt(1)),
-				// String.valueOf(resultSet.getInt(2)), resultSet.getString(3),
-				// resultSet.getString(4), resultSet.getString(5)));
 			}
 
 		} catch (ClassNotFoundException e) {
@@ -2145,16 +1994,13 @@ public class MessageController {
 
 			User user = (User) session.getAttribute("user");
 			String strUserName=user.getUserName();
-			// String sql =
-			// "select * from message_details where Message_LANG=1  and Message_status=0";
-			//String sql = "select * from message_details  where Message_LANG=1  and MESSAGE_ID IN (select MESSAGE_ID from message where MSG_STATUS=0 and IS_DELETED=0)";
 			
 			String sql="";
 			 if(strUserName.equalsIgnoreCase("admin") || strUserName.equalsIgnoreCase("banca")){
-				  sql = "select * from message_details md,message m,user_m u  where Message_LANG=1 and m.message_id = md.message_id and u.userid = m.username and u.username='"+strUserName+"' and m.MESSAGE_ID IN (select MESSAGE_ID from message where MSG_STATUS=0 and IS_DELETED=0)";
+				  sql = "select * from message_details md,message m,user_m u  where Message_LANG=1 and m.message_id = md.message_id and u.userid = m.username and u.username='"+strUserName+"' and m.MESSAGE_ID IN (select MESSAGE_ID from message where MSG_STATUS=0 and IS_DELETED=0) order by md.message_id desc";
 			 }
 			 else{
-				  sql = "select * from message_details  where Message_LANG=1  and MESSAGE_ID IN (select MESSAGE_ID from message where MSG_STATUS=0 and IS_DELETED=0)";
+				  sql = "select * from message_details  where Message_LANG=1  and MESSAGE_ID IN (select MESSAGE_ID from message where MSG_STATUS=0 and IS_DELETED=0) order by md.message_id desc";
 			 }
 
 			Statement stmt = conn.createStatement();
@@ -2173,20 +2019,8 @@ public class MessageController {
 				String msg_link = resultSet.getString("MESSAGE_LINK");
 				String msg_img_link = resultSet.getString("MESSAGE_IMG_LINK");
 
-				// String MsgDetailID ,String MsgID,String msgData,String
-				// MsgTitle,String MsgLink,String msgStatus
-				/*
-				 * messageList.add(new Message(msg_Id, msg_data, msg_title,
-				 * msg_link,msg_img_link,"0",
-				 * String.valueOf(resultSet.getInt("MESSAGE_STATUS"
-				 * )).equalsIgnoreCase("0") ? "Pending" : "Approved", "0"));
-				 */
 				messageList.add(new Message(msg_Id, msg_data, msg_title,
 						msg_link, msg_img_link, "0", "Pending", "0"));
-				// messageList.add(new
-				// Message(String.valueOf(resultSet.getInt(1)),
-				// String.valueOf(resultSet.getInt(2)), resultSet.getString(3),
-				// resultSet.getString(4), resultSet.getString(5)));
 			}
 		} catch (ClassNotFoundException e) {
 			
@@ -2984,9 +2818,7 @@ public class MessageController {
 				// model.addAttribute("msg", "Exception");
 
 			}
-		} else {
-
-		}
+		} 
 
 		if (!file2.isEmpty()) {
 			try {
@@ -3069,31 +2901,24 @@ public class MessageController {
 			conn = DBConnection.getConnection();
 			model.addAttribute("messageName123", "postnameafter connection");
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat(
-					"yyyy-MM-dd  hh:mm:ss.SSS");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd  hh:mm:ss.SSS");
 			model.addAttribute("messageName123", "effective date="
 					+ request.getParameter("effdate").toString());
 			String effectivedate = request.getParameter("effdate").toString();
 
-			String sql = "insert into message  (MESSAGE_ID,CREATED_AT,EXPIRY_AT,CATEGORY_ID,CATEGORYID, USERNAME,MSG_STATUS,IS_DELETED,IS_EDITED) "
-					+ "values(MESSAGE_SEQ.nextval,TO_DATE(?, 'DD-MM-YYYY:HH24:MI:SS'),TO_DATE(?,'DD-MM-YYYY:HH24:MI:SS'),?,?,?,?,?,?)";
-			
-			PreparedStatement stmt = conn.prepareStatement(sql,
-					Statement.RETURN_GENERATED_KEYS);
+		String sql = "insert into message (MESSAGE_ID,CREATED_AT,EXPIRY_AT,CATEGORY_ID,CATEGORYID,USERNAME,MSG_STATUS,IS_DELETED,IS_EDITED,REFERENCE_NO) "
+					+ " values(MESSAGE_SEQ.nextval,TO_DATE(?, 'DD-MM-YYYY:HH24:MI:SS'),TO_DATE(?,'DD-MM-YYYY:HH24:MI:SS'),?,?,?,?,?,?,?)";
+			System.out.println("Add Message SQL>>:"+sql+"]");
+			PreparedStatement stmt = conn.prepareStatement(sql,	Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, request.getParameter("effdate").toString());
-			System.out.println("cat 3== " + request.getParameter("effdate"));
 			stmt.setString(2, request.getParameter("expdate").toString());
-			System.out.println("cat 4== " + request.getParameter("expdate"));
 			stmt.setString(3, request.getParameter("category.categoryId"));
-			System.out.println(" cateid1=="+request.getParameter("category.categoryId"));
 			stmt.setString(4, request.getParameter("category.categoryId"));
-			System.out.println(" cat id2=="+request.getParameter("category.categoryId"));
 			stmt.setString(5, "" + user.getUserId());
-			System.out.println(" cat userid====="+   user.getUserId());
 			stmt.setInt(6, 0);
 			stmt.setInt(7, 0);
 			stmt.setInt(8, 0);
-
+			stmt.setString(9, request.getParameter("referenceNo"));
 			int queryresult = stmt.executeUpdate();
 
 			String sqlGetMax = "SELECT MAX(MESSAGE_ID) AS id FROM message";
@@ -3105,19 +2930,18 @@ public class MessageController {
 			}
 			model.addAttribute("messageName", id);
 
-			model.addAttribute("message1", request.getParameter("messageName1")
-					.toString());
-			model.addAttribute("message2", request
-					.getParameter("headlineName1").toString());
+			model.addAttribute("message1", request.getParameter("messageName1"));
+			model.addAttribute("message2", request.getParameter("headlineName1"));
 			model.addAttribute("message3", f2);
 			
-			String sql1 = "insert into message_details (MESSAGE_DETAIL_ID,MESSAGE_ID,MESSAGE_DATA,MESSAGE_TITLE,MESSAGE_LINK,MESSAGE_LANG, MESSAGE_IMG_LINK,MESSAGE_IMG_LINK_ANDROID,USERNAME) values(MESSAGE_DETAILS_SEQ.nextval,?,?,?,?,?,?,?,?)";
+		String sql1 = "insert into message_details (MESSAGE_DETAIL_ID,MESSAGE_ID,MESSAGE_DATA,MESSAGE_TITLE,MESSAGE_LINK,MESSAGE_LANG,MESSAGE_IMG_LINK,MESSAGE_IMG_LINK_ANDROID,USERNAME) "
+				+ " values(MESSAGE_DETAILS_SEQ.nextval,?,?,?,?,?,?,?,?)";
 
 			PreparedStatement stmt1 = conn.prepareStatement(sql1);
 			stmt1.setInt(1, id);
-			stmt1.setString(2, request.getParameter("messageName").toString()
+			stmt1.setString(2, request.getParameter("messageName")
 					.replaceAll("'", "''"));
-			stmt1.setString(3, request.getParameter("headlineName").toString()
+			stmt1.setString(3, request.getParameter("headlineName")
 					.replaceAll("'", "''"));
 			stmt1.setString(4, f1);
 			stmt1.setInt(5, 1);
@@ -3127,12 +2951,11 @@ public class MessageController {
 			
 			System.out.println("Id" + Id);
 			
-			if (Id!=null&&Id.equalsIgnoreCase(
-					"20"))
-			
+			if (Id!=null&&Id.equalsIgnoreCase("20"))
 				stmt1.setString(6, request.getParameter("videoURL1"));
 			else
 				stmt1.setString(6, img_file1);
+			
 			stmt1.setString(7, fandroid);
 			stmt1.setString(8, strUserName);
 			stmt1.executeUpdate();
@@ -3141,16 +2964,12 @@ public class MessageController {
 
 			PreparedStatement stmt11 = conn.prepareStatement(sql11);
 			stmt11.setInt(1, id);
-			stmt11.setString(2, request.getParameter("messageName1").toString()
-					.replaceAll("'", "''"));
-			stmt11.setString(3, request.getParameter("headlineName1")
-					.toString().replaceAll("'", "''"));
+			stmt11.setString(2, request.getParameter("messageName1").toString().replaceAll("'", "''"));
+			stmt11.setString(3, request.getParameter("headlineName1").toString().replaceAll("'", "''"));
 			stmt11.setString(4, f2);
 			stmt11.setInt(5, 2);
-			/*if (request.getParameter("category.categoryId").equalsIgnoreCase(
-					"6"))*/
-			if (Id!=null&&Id.equalsIgnoreCase(
-					"6"))
+			
+			if (Id!=null&&Id.equalsIgnoreCase("6"))
 			
 			
 				stmt11.setString(6, request.getParameter("videoURL2"));
@@ -3166,22 +2985,8 @@ public class MessageController {
 			String allpamb[] = request.getParameterValues("allpamb");
 			String allpbtb[] = request.getParameterValues("allpbtb");
 			
-			/*String channel[] = request.getParameterValues("channel");
-			System.out.println("channel===" + request.getParameterValues("channel"));*/
-			
-			
-			
 			String channel[] = request.getParameterValues("channelId");
 			
-			for (String s: channel) {           
-			        //Do your stuff here
-			        System.out.println("channel1==" + s); 
-			    }
-			
-			/*for (String s: channel) {           
-		        //Do your stuff here
-		        System.out.println("channel==" + s); 
-		    }*/
 			if (zone != null) {
 				
 				System.out.println("inside the message zone ");
