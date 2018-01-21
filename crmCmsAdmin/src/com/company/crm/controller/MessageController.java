@@ -72,15 +72,9 @@ import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 import com.notnoop.exceptions.NetworkIOException;
-//import java.util.Base64;
-//import com.google.android.gcm.server.Message;
 
 @Controller
-/*
- * @MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
- * maxFileSize=1024*1024*10, // 10MB maxRequestSize=1024*1024*50)
- */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused","resource"})
 public class MessageController {
 
 	private static final Logger LOGGER = LoggerFactory
@@ -255,7 +249,7 @@ public class MessageController {
 	@RequestMapping(value = URIConstants.LIKE_MESSAGES, method = RequestMethod.GET)
 	public String likeMessages(HttpServletResponse response, Model model,
 			HttpSession session) {
-		LOGGER.debug("Start messageList.");
+		System.out.println("Start messageList.");
 		List<Message> messageList = new ArrayList<Message>();
 		List<Category> categoryList = messageService.getCategoryList();
 
@@ -272,17 +266,18 @@ public class MessageController {
 			 String sql="";
 			 if(strUserName.equalsIgnoreCase("admin"))
 			 {
-				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join message_like b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 and c.userid = 1";
+				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join message_like b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 and c.userid = 1 order by m.message_id desc";
 			 }
 			 else if(strUserName.equalsIgnoreCase("banca"))
 			 {
-				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join message_like b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 and c.userid = 2";
+				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join message_like b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 and c.userid = 2 order by m.message_id desc";
 			 }
 			 else
 			 {
-				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join message_like b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1";
+				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join message_like b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 order by m.message_id desc";
 			 }
-			 
+			
+			 System.out.println("GET >> likeMessages >> SQL:["+sql+"]");
 			Statement stmt = conn.createStatement();
 			ResultSet resultSet = stmt.executeQuery(sql);
 
@@ -406,7 +401,8 @@ public class MessageController {
 	@RequestMapping(value = URIConstants.FAVOURITE_MESSAGES, method = RequestMethod.GET)
 	public String favouriteMessages(HttpServletResponse response, Model model,
 			HttpSession session) {
-		LOGGER.debug("Start messageList.");
+		
+		System.out.println("Start messageList.");
 		List<Message> messageList = new ArrayList<Message>();
 		List<Category> categoryList = messageService.getCategoryList();
 
@@ -418,26 +414,21 @@ public class MessageController {
 
 			User user1 = (User) session.getAttribute("user");
 			String strUserName=user1.getUserName();
-			// String sql="SELECT * FROM message_details where
-			// MESSAGE_LANG="+Integer.parseInt(user.getUserLanguage());
-			// String sql =
-			// "SELECT a.* FROM message_details a, message b where a.message_id = b.message_id and a.MESSAGE_LANG=1 and  b.username ="+String.valueOf(user.getUserId());
-			//String sql = "SELECT a.*, c.USERNAME FROM message_details a, favourite b,user_m c where b.message_id  = a.message_id and c.USERID = b.USER_ID and a.MESSAGE_LANG=1";
-			
+
 			String sql="";
 			 if(strUserName.equalsIgnoreCase("admin"))
 			 {
-				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join favourite b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 and c.userid = 1";
+				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join favourite b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 and c.userid = 1 order by m.message_id desc";
 			 }
 			 else if(strUserName.equalsIgnoreCase("banca"))
 			 {
-				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join favourite b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 and c.userid = 2";
+				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join favourite b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 and c.userid = 2 order by m.message_id desc";
 			 }
 			 else
 			 {
-				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join favourite b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1";
+				 sql = "SELECT a.MESSAGE_DETAIL_ID,a.MESSAGE_ID,a.MESSAGE_DATA,a.MESSAGE_TITLE,a.MESSAGE_LINK,a.MESSAGE_LANG,a.MESSAGE_STATUS,a.MESSAGE_IMG_LINK,a.MESSAGE_IMG_LINK_ANDROID,a.MESSAGE_LINK_ANDROID,c.username FROM message_details a inner join favourite b on a.message_id  = b.message_id inner join message m on m.message_id = a.message_id inner join user_m c on c.USERID = m.username where a.MESSAGE_LANG=1 order by m.message_id desc";
 			 }
-			
+			System.out.println("GET >> favouriteMessages >> SQL:["+sql+"]");
 			Statement stmt = conn.createStatement();
 			ResultSet resultSet = stmt.executeQuery(sql);
 
@@ -622,10 +613,11 @@ public class MessageController {
 				String base64DataString = "";
 				if (!category_Id.equals("6")) {
 					if (message_img_link != null) {
-
+						
+						File encFile = null;
 						if (message_img_link.length() > 0) {
 							try {
-								File encFile = new File(base + File.separator + UploadFolder + message_img_link);
+								encFile = new File(base + File.separator + UploadFolder + message_img_link);
 								// Sudd Added Code for Android without Encryption
 								File androidFile = new File(
 										base + File.separator + UploadFolderAndroid + message_img_link);
@@ -645,7 +637,7 @@ public class MessageController {
 								fis.close();
 
 							} catch (Exception e) {
-								e.printStackTrace();
+								System.out.println("File not found exception:["+encFile+"]");
 							}
 
 						}
@@ -682,7 +674,6 @@ public class MessageController {
 
 	}
 
-	@SuppressWarnings("resource")
 	@RequestMapping(value = "/editmessage/{id}", method = RequestMethod.GET)
 	public String EditMessage(@PathVariable("id") int id, Model model,
 			HttpSession session) {
@@ -714,39 +705,24 @@ public class MessageController {
 			Statement stmtChannel = conn.createStatement();
 			ResultSet resultSetChannel = stmtChannel.executeQuery(sqlChannel);
 			while (resultSetChannel.next()) {
-				channelList.add(new Channel(resultSetChannel
-						.getInt("CHANNELID"), resultSetChannel
-						.getString("CHANNELNAME")));
+				channelList.add(
+						new Channel(resultSetChannel.getInt("CHANNELID"), resultSetChannel.getString("CHANNELNAME")));
 			}
 
 			model.addAttribute("channelList", channelList);
 
-			model.addAttribute("categoryCall", "call to category"
-					+ categoryList.get(0).getCategoryId());
+			model.addAttribute("categoryCall", "call to category"+ categoryList.get(0).getCategoryId());
 			model.addAttribute("messageData", "MessageData");
-
-			String sql1 = "SELECT M.*,MD.* FROM MESSAGE M,MESSAGE_DETAILS MD WHERE MD.MESSAGE_ID= "
-					+ id + " AND M.MESSAGE_ID = " + id;
-			// SELECT M.MESSAGE_ID,to_char(M.CREATED_AT, 'dd-MM-yyyy
-			// HH24:MI:SS.FF'),to_char(M.EXPIRY_AT, 'dd-MM-yyyy
-			// HH24:MI:SS.FF'),M.CATEGORY_ID,MD.* FROM MESSAGE M,MESSAGE_DETAILS
-			// MD WHERE MD.MESSAGE_ID= 360 AND M.MESSAGE_ID = 360;
-			// String sql1 =
-			// "SELECT M.MESSAGE_ID,to_char(M.CREATED_AT, 'dd-MM-yyyy HH24:MI:SS.FF'),to_char(M.EXPIRY_AT, 'dd-MM-yyyy HH24:MI:SS.FF'),,M.CATEGORY_ID,MD.* FROM MESSAGE M,MESSAGE_DETAILS MD WHERE MD.MESSAGE_ID= "+id+"  AND M.MESSAGE_ID = "+id;
-
-			// ArrayList<String> zoneIds=new ArrayList<String>();
-			// ArrayList<String> CHANNEL_IDs=new ArrayList<String>();
 
 			String zoneIds = "";
 			String CHANNEL_IDs = "";
 
-			String sqlGetZoneIds = "select ZONE_ID from message_zone where MESSAGE_ID="
-					+ id;
+			String sqlGetZoneIds = "select ZONE_ID from message_zone where MESSAGE_ID=" + id;
 			Statement stmtGetZoneIds = conn.createStatement();
-			ResultSet resultSetGetZoneIds = stmtGetZoneIds
-					.executeQuery(sqlGetZoneIds);
+			ResultSet resultSetGetZoneIds = stmtGetZoneIds.executeQuery(sqlGetZoneIds);
+			
 			while (resultSetGetZoneIds.next()) {
-				// zoneIds.add(String.valueOf(resultSetGetZoneIds.getInt("ZONE_ID")));
+
 				zoneIds += String
 						.valueOf(resultSetGetZoneIds.getInt("ZONE_ID")) + ",";
 			}
@@ -754,23 +730,24 @@ public class MessageController {
 				zoneIds = zoneIds.substring(0, zoneIds.length() - 1);
 			}
 
-			String sqlGetCHANNEL_IDs = "select CHANNEL_ID from MESSAGE_CHANNEL where MESSAGE_ID="
-					+ id;
+			String sqlGetCHANNEL_IDs = "select CHANNEL_ID from MESSAGE_CHANNEL where MESSAGE_ID="+ id;
 			Statement stmtGetCHANNEL_IDs = conn.createStatement();
-			ResultSet resultSetGetCHANNEL_IDs = stmtGetCHANNEL_IDs
-					.executeQuery(sqlGetCHANNEL_IDs);
+			ResultSet resultSetGetCHANNEL_IDs = stmtGetCHANNEL_IDs.executeQuery(sqlGetCHANNEL_IDs);
+			
 			while (resultSetGetCHANNEL_IDs.next()) {
-				// CHANNEL_IDs.add(String.valueOf(resultSetGetCHANNEL_IDs.getInt("CHANNEL_ID")));
-				CHANNEL_IDs += String.valueOf(resultSetGetCHANNEL_IDs
-						.getInt("CHANNEL_ID")) + ",";
+
+				CHANNEL_IDs += String.valueOf(resultSetGetCHANNEL_IDs.getInt("CHANNEL_ID")) + ",";
 			}
 			if (!CHANNEL_IDs.equals("")) {
 				CHANNEL_IDs = CHANNEL_IDs
 						.substring(0, CHANNEL_IDs.length() - 1);
 			}
-
+			
+			String msgSql = "SELECT M.*,MD.* FROM MESSAGE M,MESSAGE_DETAILS MD WHERE MD.MESSAGE_ID= "+ id + " AND M.MESSAGE_ID = " + id;
 			Statement stmt = conn.createStatement();
-			ResultSet resultSet = stmt.executeQuery(sql1);
+			ResultSet resultSet = stmt.executeQuery(msgSql);
+			System.out.println("EditMessage >> SQL:["+msgSql+"]");
+			
 			List<Message> messageArray = new ArrayList<Message>();
 			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 			String message_id = "";
@@ -784,51 +761,40 @@ public class MessageController {
 			String message_link = "";
 			String message_img_link = "";
 			String message_lang = "";
+			String refNo = "";
+			
 			while (resultSet.next()) {
 				message_id = String.valueOf(resultSet.getInt("MESSAGE_ID"));
-				created_date = ""
-						+ dateFormat.format(resultSet
-								.getTimestamp("CREATED_AT"));
-				// String created_date = "" +
-				// resultSet.getTimestamp("CREATED_AT");
-				expiry_date = ""
-						+ ""
-						+ dateFormat
-								.format(resultSet.getTimestamp("EXPIRY_AT"));
-				// String expiry_date = "" +
-				// resultSet.getTimestamp("EXPIRY_AT");
+				created_date = "" + dateFormat.format(resultSet.getTimestamp("CREATED_AT"));
+				expiry_date = "" + "" + dateFormat.format(resultSet.getTimestamp("EXPIRY_AT"));
 				category_Id = String.valueOf(resultSet.getInt("CATEGORY_ID"));
-				message_detail_Id = String.valueOf(resultSet
-						.getInt("MESSAGE_DETAIL_ID"));
+				message_detail_Id = String.valueOf(resultSet.getInt("MESSAGE_DETAIL_ID"));
 				message_Id = String.valueOf(resultSet.getInt("MESSAGE_ID"));
 				model.addAttribute("messageData", message_Id);
 
-				message_data = resultSet.getString("MESSAGE_DATA") != null ? resultSet
-						.getString("MESSAGE_DATA") : "";
+				message_data = resultSet.getString("MESSAGE_DATA") != null ? resultSet.getString("MESSAGE_DATA") : "";
 				model.addAttribute("messageData", message_data);
-				message_title = resultSet.getString("MESSAGE_TITLE") != null ? resultSet
-						.getString("MESSAGE_TITLE") : "";
+				message_title = resultSet.getString("MESSAGE_TITLE") != null ? resultSet.getString("MESSAGE_TITLE")
+						: "";
 				model.addAttribute("messageData", message_data);
-				message_link = resultSet.getString("MESSAGE_LINK") != null ? resultSet
-						.getString("MESSAGE_LINK") : "";
+				message_link = resultSet.getString("MESSAGE_LINK") != null ? resultSet.getString("MESSAGE_LINK") : "";
 				model.addAttribute("messageData", message_data);
-				message_img_link = resultSet.getString("MESSAGE_IMG_LINK") != null ? resultSet
-						.getString("MESSAGE_IMG_LINK") : "";
+				message_img_link = resultSet.getString("MESSAGE_IMG_LINK") != null
+						? resultSet.getString("MESSAGE_IMG_LINK")
+						: "";
 				model.addAttribute("messageData", message_data);
 				message_lang = String.valueOf(resultSet.getInt("MESSAGE_LANG"));
 
-				// String message_status =
-				// String.valueOf(resultSet.getInt("MESSAGE_STATUS"));
-
-				messageArray.add(new Message(message_detail_Id, message_id,
-						message_data, message_title, message_link,
-						message_img_link, created_date, expiry_date,
-						category_Id));
+				messageArray.add(new Message(message_detail_Id, message_id, message_data, message_title, message_link,
+						message_img_link, created_date, expiry_date, category_Id));
 				model.addAttribute("categoryId", category_Id);
+				
+				refNo = resultSet.getString("REFERENCE_NO");
 			}
 			model.addAttribute("zoneIds", zoneIds);
 			model.addAttribute("CHANNEL_IDs", CHANNEL_IDs);
-
+			model.addAttribute("referenceNo",refNo);
+			
 			String imgstr1 = "";
 			String imgstr = "";
 			String base = System.getProperty("catalina.base");
@@ -866,57 +832,55 @@ public class MessageController {
 			JNCryptor cryptor = new AES256JNCryptor();
 			String password = "aes123";
 			// String imgstr="";
-
+			File uploadedFile = null;
 			if (messageArray.get(0).getMsgLink2().length() > 0) {
 				if (!category_Id.equals("6")) {
-					File uploadedFile = new File(dateDir.getAbsolutePath()
-							+ File.separator
-							+ messageArray.get(0).getMsgLink2());
-					// For Android
-					File uploadedFileAndroid = new File(
-							dateDirAndroid.getAbsolutePath() + File.separator
-									+ messageArray.get(0).getMsgLink2());
+					try {
+						uploadedFile = new File(
+								dateDir.getAbsolutePath() + File.separator + messageArray.get(0).getMsgLink2());
+						// For Android
+						File uploadedFileAndroid = new File(
+								dateDirAndroid.getAbsolutePath() + File.separator + messageArray.get(0).getMsgLink2());
 
-					FileInputStream inputStream = new FileInputStream(
-							uploadedFile);
-					// For Android
-					FileInputStream inputStreamAndroid = new FileInputStream(
-							uploadedFileAndroid);
+						FileInputStream inputStream = new FileInputStream(uploadedFile);
+						// For Android
+						FileInputStream inputStreamAndroid = new FileInputStream(uploadedFileAndroid);
 
-					byte[] filebytes = new byte[(int) uploadedFile.length()];
-					// for Android
-					byte[] filebytesAndroid = new byte[(int) uploadedFileAndroid
-							.length()];
-					inputStream.read(filebytes);
+						byte[] filebytes = new byte[(int) uploadedFile.length()];
+						// for Android
+						byte[] filebytesAndroid = new byte[(int) uploadedFileAndroid.length()];
+						inputStream.read(filebytes);
 
-					// For Android
-					inputStreamAndroid.read(filebytesAndroid);
+						// For Android
+						inputStreamAndroid.read(filebytesAndroid);
+					}catch(Exception e) {
+						System.out.println("File Not Found:["+uploadedFile+"]");
+					}
 				}
 			}
-
+			File uploadedFile1 = null;
 			if (messageArray.get(0).getMsgLink2().length() > 0) {
 				if (!category_Id.equals("6")) {
-					File uploadedFile1 = new File(dateDir.getAbsolutePath()
-							+ File.separator
-							+ messageArray.get(0).getMsgLink2());
-					// for Android
-					File uploadedFileAndroid = new File(
-							dateDirAndroid.getAbsolutePath() + File.separator
-									+ messageArray.get(0).getMsgLink2());
-					FileInputStream inputStream1 = new FileInputStream(
-							uploadedFile1);
-					// For Android
-					FileInputStream inputStreamAndroid = new FileInputStream(
-							uploadedFileAndroid);
+				  try {
+						uploadedFile1 = new File(
+								dateDir.getAbsolutePath() + File.separator + messageArray.get(0).getMsgLink2());
+						// for Android
+						File uploadedFileAndroid = new File(
+								dateDirAndroid.getAbsolutePath() + File.separator + messageArray.get(0).getMsgLink2());
+						FileInputStream inputStream1 = new FileInputStream(uploadedFile1);
+						// For Android
+						FileInputStream inputStreamAndroid = new FileInputStream(uploadedFileAndroid);
 
-					byte[] filebytes1 = new byte[(int) uploadedFile1.length()];
-					// For Android
-					byte[] filebytesAndroid = new byte[(int) uploadedFileAndroid
-							.length()];
-					inputStream1.read(filebytes1);
-					// For Android
-					inputStreamAndroid.read(filebytesAndroid);
-					imgstr1 = new String(filebytes1, "UTF-8");
+						byte[] filebytes1 = new byte[(int) uploadedFile1.length()];
+						// For Android
+						byte[] filebytesAndroid = new byte[(int) uploadedFileAndroid.length()];
+						inputStream1.read(filebytes1);
+						// For Android
+						inputStreamAndroid.read(filebytesAndroid);
+						imgstr1 = new String(filebytes1, "UTF-8");
+					}catch(Exception e) {
+						System.out.println("File Not Found:["+uploadedFile1+"]");
+					}
 				}
 			}
 
@@ -931,30 +895,15 @@ public class MessageController {
 				}
 			}
 
-			/*
-			 * model.addAttribute("filePath",filePath );
-			 * model.addAttribute("filePath1",filePath1 );
-			 */
 			model.addAttribute("filePath", imgstr);
 			model.addAttribute("filePath1", imgstr1);
 			model.addAttribute("imgfilename", messageArray.get(0).getMsgLink2());
-			model.addAttribute("imgfilename1", messageArray.get(0)
-					.getMsgLink2());
+			model.addAttribute("imgfilename1", messageArray.get(0).getMsgLink2());
 			model.addAttribute("messageData", messageArray.get(0).getMsgData());
-			// session.setAttribute("messageEng", messageArray.get(0));
-			// session.setAttribute("messageBha", messageArray.get(1));
+			
 			model.addAttribute("messageEng", messageArray.get(0));
 			model.addAttribute("messageBha", messageArray.get(0));
 
-		} catch (ClassNotFoundException e) {
-			
-			e.printStackTrace();
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			
-			e.printStackTrace();
 		} catch (IOException e) {
 			
 			e.printStackTrace();
@@ -1098,24 +1047,13 @@ public class MessageController {
 				String password = "aes123";
 				try {
 					model.addAttribute("msg", "uploaded file" + uploadedFile);
-					FileInputStream inputStream = new FileInputStream(
-							uploadedFile);
+					FileInputStream inputStream = new FileInputStream(uploadedFile);
 
 					byte[] filebytes = new byte[(int) uploadedFile.length()];
-					model.addAttribute("msg", "uploaded file"
-							+ (int) uploadedFile.length());
+					model.addAttribute("msg", "uploaded file" + (int) uploadedFile.length());
 					inputStream.read(filebytes);
-					model.addAttribute("msg", "length of bytes"
-							+ filebytes.length);
+					model.addAttribute("msg", "length of bytes" + filebytes.length);
 
-					//byte[] ciphertext = cryptor.encryptData(filebytes,
-							//password.toCharArray());
-
-				/*	model.addAttribute("msg", "length of ciphertext"
-							+ ciphertext.length);
-*/
-					// String filePath = "D:/Varsha/apache-tomcat-8.0.24/" +
-					// UploadFolder + f1;
 					String filePath = base + File.separator + UploadFolder + f1;
 					model.addAttribute("msg", "filePath" + filePath);
 					File encryptedFile = new File(filePath);
@@ -1124,20 +1062,15 @@ public class MessageController {
 					}
 
 					try {
-						
+
 						model.addAttribute("msg", "write file" + filePath);
-						FileOutputStream fos = new FileOutputStream(
-								encryptedFile);
+						FileOutputStream fos = new FileOutputStream(encryptedFile);
 						System.out.println("fos" + fos);
 						fos.write(filebytes);
 						fos.flush();
 						fos.close();
 						// script.write("ok1");
-					} catch (FileNotFoundException e) {
-						
-						// script.write("ok2");
-						e.printStackTrace();
-					} catch (IOException e) {
+					} catch (Exception e) {
 						
 						// script.write("ok3");
 						e.printStackTrace();
@@ -1211,14 +1144,6 @@ public class MessageController {
 					model.addAttribute("msg", "length of bytes"
 							+ filebytes.length);
 
-					/*byte[] ciphertext = cryptor.encryptData(filebytes,
-							password.toCharArray());
-
-					model.addAttribute("msg", "length of ciphertext"
-							+ ciphertext.length);*/
-
-					// String filePath = "D:/Varsha/apache-tomcat-8.0.24/" +
-					// UploadFolder + f2;
 					String filePath = base + File.separator + UploadFolder + f2;
 					model.addAttribute("msg", "filePath" + filePath);
 					File encryptedFile = new File(filePath);
@@ -1255,31 +1180,8 @@ public class MessageController {
 			} catch (Exception e) {
 
 			}
-		} else {
-
 		}
 
-		/*
-		 * String zoneIds=""; String CHANNEL_IDs=""; String zoneId=""; String
-		 * CHANNEL_ID=""; if(zone!=null) { for(int i=0;i< zone.length; i++) {
-		 * if(zone[i].equalsIgnoreCase("all")) { zoneId="1"; } else
-		 * if(zone[i].equalsIgnoreCase("north")) { zoneId="2"; } else
-		 * if(zone[i].equalsIgnoreCase("east")) { zoneId="3"; } else
-		 * if(zone[i].equalsIgnoreCase("west")) { zoneId="4"; } else
-		 * if(zone[i].equalsIgnoreCase("south")) { zoneId="5"; }
-		 * 
-		 * if(i==0) { zoneIds=zoneIds+zoneId; } else zoneIds=zoneIds+","+zoneId;
-		 * } } if(channel!=null) { for(int i=0;i< channel.length; i++) {
-		 * if(channel[i].equalsIgnoreCase("all")) { CHANNEL_ID="1"; } else
-		 * if(channel[i].equalsIgnoreCase("PBTB agents")) { CHANNEL_ID="2"; }
-		 * else if(channel[i].equalsIgnoreCase("PBTB leaders")) {
-		 * CHANNEL_ID="3"; } else if(channel[i].equalsIgnoreCase("PAMB agents"))
-		 * { CHANNEL_ID="4"; } else
-		 * if(channel[i].equalsIgnoreCase("PAMB leaders")) { CHANNEL_ID="5"; }
-		 * 
-		 * if(i==0) { CHANNEL_IDs=CHANNEL_IDs+CHANNEL_ID; } else
-		 * CHANNEL_IDs=CHANNEL_IDs+","+CHANNEL_ID; } }
-		 */
 		Connection conn = null;
 		try {
 			
@@ -1298,79 +1200,59 @@ public class MessageController {
 				while (resultSetCheckStatus.next()) {
 					int msg_status = resultSetCheckStatus.getInt("MSG_STATUS");
 					if (msg_status != 0) {
-						
-						
-						
-						String maxIdquery=("select max(MESSAGE_EDIT_ID) from message_edit");
-						System.out.println("maxIdquery "+maxIdquery);
-								   
+
+						String maxIdquery = ("select max(MESSAGE_EDIT_ID) from message_edit");
+						System.out.println("maxIdquery " + maxIdquery);
+
 						Statement st = conn.createStatement();
-						int maxID=0;
-				    
+						int maxID = 0;
+
 						ResultSet rs = st.executeQuery(maxIdquery);
-					   
-						   if (rs.next())
-						   {
-							   maxID = rs.getInt(1);
-							   
-							   System.out.println("MESSAGE_EDIT_ID===" + maxID);
-							}
-						   
-					st.close();
-					
+
+						if (rs.next()) {
+							maxID = rs.getInt(1);
+
+							System.out.println("MESSAGE_EDIT_ID===" + maxID);
+						}
+
+						st.close();
+
 						String sqlSaveEditedMsg = "INSERT INTO MESSAGE_EDIT (MESSAGE_EDIT_ID, MESSAGE_ID) VALUES (?, ?)";
-						
+
 						PreparedStatement stmtSaveEditedMsg = conn.prepareStatement(sqlSaveEditedMsg);
-						stmtSaveEditedMsg.setInt(1,(maxID+1));
-					
+						stmtSaveEditedMsg.setInt(1, (maxID + 1));
+
 						stmtSaveEditedMsg.setInt(2, Integer.parseInt(request.getParameter("messageId")));
-						
-						
+
 						stmtSaveEditedMsg.executeUpdate();
-						
+
 					}
 				}
 			}
 
-			model.addAttribute("msg",
-					"write file" + request.getParameter("effdate"));
-			String sql = "UPDATE MESSAGE SET CREATED_AT= TO_DATE('"
-					+ request.getParameter("effdate")
-					+ "', 'DD-MM-YYYY:HH24:MI:SS'), EXPIRY_AT=TO_DATE('"
-					+ request.getParameter("expdate")
-					+ "', 'DD-MM-YYYY:HH24:MI:SS') , CATEGORY_ID= " 
-					+ request.getParameter("category.categoryId") 
-					+ ", CATEGORYID= " 
-					+ request.getParameter("category.categoryId") 
-					+ ",MSG_STATUS=0  WHERE MESSAGE_ID="
-					+ request.getParameter("messageId");
-			/*
-			 * String sql = "UPDATE MESSAGE SET CREATED_AT= '" +
-			 * request.getParameter("effdate") + "', EXPIRY_AT='" +
-			 * request.getParameter("expdate") +
-			 * "' , CATEGORY_ID= "+request.getParameter
-			 * ("category.categoryId")+",MSG_STATUS=0  WHERE MESSAGE_ID=" +
-			 * request.getParameter("messageId");
-			 */
+			model.addAttribute("msg", "write file" + request.getParameter("effdate"));
+			String sql = "UPDATE MESSAGE SET CREATED_AT= TO_DATE('" + request.getParameter("effdate")
+					+ "', 'DD-MM-YYYY:HH24:MI:SS'), EXPIRY_AT=TO_DATE('" + request.getParameter("expdate")
+					+ "', 'DD-MM-YYYY:HH24:MI:SS') , CATEGORY_ID= " + request.getParameter("category.categoryId")
+					+ ", CATEGORYID= " + request.getParameter("category.categoryId")
+					+ ",MSG_STATUS=0"
+					+ ",REFERENCE_NO = '"+request.getParameter("referenceNo")+"' "
+					+ "  WHERE MESSAGE_ID=" + request.getParameter("messageId");
+			
 			System.out.println("inside message editquery execute " +request.getParameter("messageId"));
 			
 			Statement stmt = conn.createStatement();
 			int queryresult = stmt.executeUpdate(sql);
 			
 			String sql1 = "UPDATE message_details SET MESSAGE_DATA= '"
-					+ (request.getParameter("messageName")
-							.replaceAll("'", "''"))
-					+ "', MESSAGE_TITLE='"
-					+ (request.getParameter("headlineName").replaceAll("'",
-							"''")) + "'";
+					+ (request.getParameter("messageName").replaceAll("'", "''")) + "', MESSAGE_TITLE='"
+					+ (request.getParameter("headlineName").replaceAll("'", "''")) + "'";
 
 			if (f1 != null && f1.length() > 0)
 				sql1 = sql1 + " , MESSAGE_LINK= '" + f1 + "'";
-			if (request.getParameter("category.categoryId").equalsIgnoreCase(
-					"6")) {
+			if (request.getParameter("category.categoryId").equalsIgnoreCase("6")) {
 
-				sql1 = sql1 + " , MESSAGE_IMG_LINK= '"
-						+ request.getParameter("videoURL1") + "'";
+				sql1 = sql1 + " , MESSAGE_IMG_LINK= '" + request.getParameter("videoURL1") + "'";
 
 			} else {
 				if (img_file1 != null && img_file1.length() > 0) {
@@ -1378,33 +1260,21 @@ public class MessageController {
 				}
 			}
 
-			sql1 = sql1 + "  WHERE MESSAGE_ID="
-					+ request.getParameter("messageId") + " and MESSAGE_LANG=1";
+			sql1 = sql1 + "  WHERE MESSAGE_ID=" + request.getParameter("messageId") + " and MESSAGE_LANG=1";
 
 			model.addAttribute("testMessage", sql1);
-			/*
-			 * String sql1 = "UPDATE message_details SET MESSAGE_DATA= '" +
-			 * request.getParameter("messageName") + "', MESSAGE_TITLE='" +
-			 * request.getParameter("headlineName") + "' , MESSAGE_LINK= '" +
-			 * f1+"', MESSAGE_IMG_LINK= '"+img_file1 + "'  WHERE MESSAGE_ID=" +
-			 * request.getParameter("messageId") + " and MESSAGE_LANG=1";
-			 */
+			
 			Statement stmtUpdate = conn.createStatement();
 			stmtUpdate.executeUpdate(sql1);
 
 			String sql11 = "UPDATE message_details SET MESSAGE_DATA= '"
-					+ (request.getParameter("messageName1").replaceAll("'",
-							"''"))
-					+ "', MESSAGE_TITLE='"
-					+ (request.getParameter("headlineName1").replaceAll("'",
-							"''")) + "'";
+					+ (request.getParameter("messageName1").replaceAll("'", "''")) + "', MESSAGE_TITLE='"
+					+ (request.getParameter("headlineName1").replaceAll("'", "''")) + "'";
 			if (f2 != null && f2.length() > 0)
 				sql11 = sql11 + " , MESSAGE_LINK= '" + f2 + "'";
-			if (request.getParameter("category.categoryId").equalsIgnoreCase(
-					"6")) {
+			if (request.getParameter("category.categoryId").equalsIgnoreCase("6")) {
 
-				sql11 = sql11 + " , MESSAGE_IMG_LINK= '"
-						+ request.getParameter("videoURL2") + "'";
+				sql11 = sql11 + " , MESSAGE_IMG_LINK= '" + request.getParameter("videoURL2") + "'";
 
 			} else {
 				if (img_file2 != null && img_file2.length() > 0) {
@@ -1412,15 +1282,8 @@ public class MessageController {
 				}
 			}
 
-			sql11 = sql11 + "  WHERE MESSAGE_ID="
-					+ request.getParameter("messageId") + " and MESSAGE_LANG=2";
-			/*
-			 * String sql11 = "UPDATE message_details SET MESSAGE_DATA= '" +
-			 * request.getParameter("messageName1") + "', MESSAGE_TITLE='" +
-			 * request.getParameter("headlineName1") + "' , MESSAGE_LINK= '" +
-			 * f2+"', MESSAGE_IMG_LINK= '"+img_file2 + "'  WHERE MESSAGE_ID=" +
-			 * request.getParameter("messageId") + " and MESSAGE_LANG=2";
-			 */
+			sql11 = sql11 + "  WHERE MESSAGE_ID=" + request.getParameter("messageId") + " and MESSAGE_LANG=2";
+			
 			Statement stmt11 = conn.createStatement();
 			stmt11.executeUpdate(sql11);
 
@@ -1428,39 +1291,23 @@ public class MessageController {
 			String channel[] = request.getParameterValues("channel");
 
 			String sqlDeleteZone = "delete from MESSAGE_ZONE where MESSAGE_ID=?";
-			PreparedStatement stmtDeleteZone = conn
-					.prepareStatement(sqlDeleteZone);
-			stmtDeleteZone.setInt(1,
-					Integer.parseInt(request.getParameter("messageId")));
+			PreparedStatement stmtDeleteZone = conn.prepareStatement(sqlDeleteZone);
+			stmtDeleteZone.setInt(1, Integer.parseInt(request.getParameter("messageId")));
 			stmtDeleteZone.executeUpdate();
 
 			String sqlDeleteChannel = "delete from MESSAGE_CHANNEL where MESSAGE_ID=?";
-			PreparedStatement stmtDeleteChannel = conn
-					.prepareStatement(sqlDeleteChannel);
-			stmtDeleteChannel.setInt(1,
-					Integer.parseInt(request.getParameter("messageId")));
+			PreparedStatement stmtDeleteChannel = conn.prepareStatement(sqlDeleteChannel);
+			stmtDeleteChannel.setInt(1, Integer.parseInt(request.getParameter("messageId")));
 			stmtDeleteChannel.executeUpdate();
 
 			if (zone != null) {
 				for (int i = 0; i < zone.length; i++) {
 					int zoneId = 0;
-					// String
-					// sqlGetZoneId="select zone_id from zone where ZONE_NAME=?";
-					// PreparedStatement
-					// stmtGetZoneId=conn.prepareStatement(sqlGetZoneId);
-					// stmtGetZoneId.setString(1, zone[i]);
-					// ResultSet
-					// resultSetGetZoneId=stmtGetZoneId.executeQuery();
-					// while(resultSetGetZoneId.next())
-					// {
-					// zoneId=resultSetGetZoneId.getInt("ZONE_ID");
 					zoneId = Integer.parseInt(zone[i]);
-					// }
 
 					String sqlZone = "INSERT INTO MESSAGE_ZONE (MSG_ZONE_ID, MESSAGE_ID, ZONE_ID) VALUES (MESSAGE_ZONE_SEQ.nextval, ?, ?)";
 					PreparedStatement stmtZone = conn.prepareStatement(sqlZone);
-					stmtZone.setInt(1,
-							Integer.parseInt(request.getParameter("messageId")));
+					stmtZone.setInt(1, Integer.parseInt(request.getParameter("messageId")));
 					stmtZone.setInt(2, zoneId);
 					stmtZone.executeUpdate();
 				}
@@ -1469,38 +1316,17 @@ public class MessageController {
 			if (channel != null) {
 				for (int i = 0; i < channel.length; i++) {
 					int CHANNEL_ID = 0;
-					// String
-					// sqlGetCHANNEL_ID="select CHANNEL_ID from CHANNEL where CHANNEL_NAME=?";
-					// model.addAttribute("testZone", sqlGetCHANNEL_ID);
-					// PreparedStatement
-					// stmtGetCHANNEL_ID=conn.prepareStatement(sqlGetCHANNEL_ID);
-					// stmtGetCHANNEL_ID.setString(1, channel[i]);
-					// ResultSet
-					// resultSetGetCHANNEL_ID=stmtGetCHANNEL_ID.executeQuery();
-					// while(resultSetGetCHANNEL_ID.next())
-					// {
-					// CHANNEL_ID=resultSetGetCHANNEL_ID.getInt("CHANNEL_ID");
 					CHANNEL_ID = Integer.parseInt(channel[i]);
-					// }
 
 					String sqlChannel = "INSERT INTO MESSAGE_CHANNEL (MSG_CHANNEL_ID, MESSAGE_ID, CHANNEL_ID) VALUES (MESSAGE_CHANNEL_SEQ.nextval, ?, ?)";
-					PreparedStatement stmtChannel = conn
-							.prepareStatement(sqlChannel);
-					stmtChannel
-							.setInt(1, Integer.parseInt(request
-									.getParameter("messageId")));
+					PreparedStatement stmtChannel = conn.prepareStatement(sqlChannel);
+					stmtChannel.setInt(1, Integer.parseInt(request.getParameter("messageId")));
 					stmtChannel.setInt(2, CHANNEL_ID);
 					stmtChannel.executeUpdate();
 				}
 			}
 
 			conn.close();
-		} catch (ClassNotFoundException e) {
-
-			e.printStackTrace();
-		} catch (SQLException e) {
-
-			e.printStackTrace();
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -1509,12 +1335,7 @@ public class MessageController {
 
 
 		return "msgedited";
-		// return "editmessage";
-
 	}
-
-	// @RequestMapping(value = URIConstants.GET_LATEST_MESSAGES, method =
-	// RequestMethod.GET)
 
 	@RequestMapping(value = URIConstants.DELETE_MESSAGE, method = RequestMethod.GET)
 	public String deleteMessage(@PathVariable("id") int id, Model model) {
@@ -1840,7 +1661,7 @@ public class MessageController {
 			Statement stmt = conn.createStatement();
 			ResultSet resultSet = stmt.executeQuery(sql);
 
-			System.out.println("@@@@@@@@Tush" + sql);
+			System.out.println("GET >> messagesStatus >> SQL:[" + sql+"]");
 
 			while (resultSet.next()) {
 
@@ -1888,10 +1709,9 @@ public class MessageController {
 			DBConnection.closeConnection(conn);
 		}
 
-		// String sqlfav="select * from favourite where message_id="+ msgID +"";
 		
 		model.addAttribute("messageList", messageList);
-		// model.addAttribute("message", new Message());
+		
 		return "messageStatus";
 
 	}
@@ -3326,7 +3146,7 @@ public class MessageController {
 	@RequestMapping(value = URIConstants.GET_READ_MESSAGES, method = RequestMethod.GET)
 	public String readmessages(HttpServletResponse response, Model model,
 			HttpSession session) {
-		LOGGER.debug("Start messageList.");
+		System.out.println("Start messageList.");
 		List<Message> messageList = new ArrayList<Message>();
 
 		
@@ -3337,24 +3157,19 @@ public class MessageController {
 			conn = DBConnection.getConnection();
 
 			User user1 = (User) session.getAttribute("user");
-			String strUserName=user1.getUserName();
-			String sql="";
-			
-			
-			 if(strUserName.equalsIgnoreCase("admin"))
-			 {
-				 sql = "select	r.*, md.* , 	um.USERNAME,	c.CATEGORYNAME,	m.CREATED_AT from 	message_details md ,	user_m um ,	message m, user_m u ,	read_reciept r,	category c where m.username = u.userid and	m.message_id =  md.message_id and 	r.USER_ID = um.USERID and 	m.category_id=c.categoryId  and  	md.message_id  = r.message_id and 	md.message_lang = 1 and   m.MSG_STATUS =1 and m.IS_DELETED=0 and u.userid=1";
-			 }
-			 else if(strUserName.equalsIgnoreCase("banca"))
-			 {
-				 sql = "select	r.*, md.* , 	um.USERNAME,	c.CATEGORYNAME,	m.CREATED_AT from 	message_details md ,	user_m um ,	message m, user_m u ,	read_reciept r,	category c where m.username = u.userid and	m.message_id =  md.message_id and 	r.USER_ID = um.USERID and 	m.category_id=c.categoryId  and  	md.message_id  = r.message_id and 	md.message_lang = 1 and   m.MSG_STATUS =1 and m.IS_DELETED=0 and u.userid=2";
-			 }
-			 else
-			 {
-				 sql = "select	r.*, md.* , 	um.USERNAME,	c.CATEGORYNAME,	m.CREATED_AT from 	message_details md ,	user_m um ,	message m, user_m u ,	read_reciept r,	category c where m.username = u.userid and	m.message_id =  md.message_id and 	r.USER_ID = um.USERID and 	m.category_id=c.categoryId  and  	md.message_id  = r.message_id and 	md.message_lang = 1 and   m.MSG_STATUS =1 and m.IS_DELETED=0";
-			 }
-			
+			String strUserName = user1.getUserName();
+			String sql = "";
+
+			if (strUserName.equalsIgnoreCase("admin")) {
+				sql = "select	r.*, md.* , 	um.USERNAME,	c.CATEGORYNAME,	m.CREATED_AT from 	message_details md ,	user_m um ,	message m, user_m u ,	read_reciept r,	category c where m.username = u.userid and	m.message_id =  md.message_id and 	r.USER_ID = um.USERID and 	m.category_id=c.categoryId  and  	md.message_id  = r.message_id and 	md.message_lang = 1 and   m.MSG_STATUS =1 and m.IS_DELETED=0 and u.userid=1 order by m.message_id desc";
+			} else if (strUserName.equalsIgnoreCase("banca")) {
+				sql = "select	r.*, md.* , 	um.USERNAME,	c.CATEGORYNAME,	m.CREATED_AT from 	message_details md ,	user_m um ,	message m, user_m u ,	read_reciept r,	category c where m.username = u.userid and	m.message_id =  md.message_id and 	r.USER_ID = um.USERID and 	m.category_id=c.categoryId  and  	md.message_id  = r.message_id and 	md.message_lang = 1 and   m.MSG_STATUS =1 and m.IS_DELETED=0 and u.userid=2  order by m.message_id desc";
+			} else {
+				sql = "select	r.*, md.* , 	um.USERNAME,	c.CATEGORYNAME,	m.CREATED_AT from 	message_details md ,	user_m um ,	message m, user_m u ,	read_reciept r,	category c where m.username = u.userid and	m.message_id =  md.message_id and 	r.USER_ID = um.USERID and 	m.category_id=c.categoryId  and  	md.message_id  = r.message_id and 	md.message_lang = 1 and   m.MSG_STATUS =1 and m.IS_DELETED=0 order by m.message_id desc";
+			}
+
 			Statement stmt = conn.createStatement();
+			System.out.println("GET >> readmessages >> SQL:["+sql+"]");
 			ResultSet resultSet = stmt.executeQuery(sql);
 
 			while (resultSet.next()) {
@@ -3365,8 +3180,7 @@ public class MessageController {
 				String username = resultSet.getString("USERNAME");
 				String timestamp = resultSet.getString("READ_AT");
 
-				messageList.add(new Message(msgId, categoryName, msgTitle,
-						username, timestamp));
+				messageList.add(new Message(msgId, categoryName, msgTitle, username, timestamp));
 			}
 		} catch (ClassNotFoundException e) {
 			
@@ -3382,7 +3196,7 @@ public class MessageController {
 
 
 		model.addAttribute("messageList", messageList);
-		// model.addAttribute("message", new Message());
+
 		return "readmessages";
 	}
 
@@ -3390,21 +3204,10 @@ public class MessageController {
 	
 	
 	@RequestMapping(value = "allcategoryfilter/{id}", method = RequestMethod.GET)
-	//public String allcategoryfilter(@PathVariable("id") String id, Model model,
-			//HttpSession session, HttpServletRequest request, Message message) {
-		public void allcategoryfilter(@PathVariable("id") String id , HttpServletResponse res) {
-		
-		// String region1=request.getParameter("region");
+	public void allcategoryfilter(@PathVariable("id") String id , HttpServletResponse res) {
 	    String returnResult="";
 		System.out.println("xxxxxxxxxxxx allcategoryfilter: channel id " + id);
-		// Message message = new Message();
-		// message.setRegion(id);
-		// List<Message> messageList = new ArrayList<Message>();
-		//Message message2 = new Message();
-		// messageList.add(new Message(id));
-		// message.setRegion(id);
-		// String message1=message.region;
-		// testresult="";
+		
 		List<Category> categoryList = new ArrayList<Category>();
 		List<Integer> categoryIdList = new ArrayList<Integer>();
 		JSONObject obj = new JSONObject();

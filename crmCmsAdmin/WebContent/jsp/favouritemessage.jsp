@@ -340,6 +340,7 @@ $(document).ready(function(){
         $(document).ready(function() {
             $('.dataTables-example').dataTable({
                 responsive: true,
+                ordering:false,
                 "dom": 'T<"clear">lfrtip',
                 "tableTools": {
                     "sSwfPath": "<%=request.getContextPath()%>/resources/template/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
