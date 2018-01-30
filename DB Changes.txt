@@ -1,0 +1,3 @@
+ALTER TABLE MESSAGE ADD REFERENCE_NO VARCHAR2(100)
+alter table map_channel_category drop constraint MAP_CHANNEL_CATEGORY_PK
+drop index MAP_CHANNEL_CATEGORY_PK

@@ -317,9 +317,6 @@ $(document).ready(function(){
 											<th>USER_NAME</th>
 											<th>STATUS</th>
 											<th>LOGIN DATE/TIME</th>
-<!-- 											<th>Location</th> -->
-<!-- 											<th>Action</th> -->
-
 										</tr>
 									</thead>
 									<tbody>
@@ -329,16 +326,15 @@ $(document).ready(function(){
 												<td>${messageStatus.username}</td>
 												<td>${messageStatus.status}</td>
 												<td>${messageStatus.logindate}</td>
-<%-- 												<td>${messageStatus.location}</td> --%>
 												
 											</tr>
 										</c:forEach>
-
-
-
 									</tbody>
 
 								</table>
+							</c:when>
+							<c:when test="${empty messageList}">
+							<p>No Records found</p>
 							</c:when>
 						</c:choose>
 

@@ -251,46 +251,33 @@ $(document).ready(function(){
 			</div>
 
 			<div class="col-md-10">
-				<br/><form:form class="form-horizontal" action="pendingmessages"
+				<br />
+				<form:form class="form-horizontal" action="pendingmessages"
 					method="get" commandName="message">
 					<div class="clear"></div>
 					<div class="col-sm-12 addedCategorys">
 						<div class="CategoryTable">
 
-							<%-- <c:forEach var="message" items="${messageList}"> 
-									<div><c:out value="${message.msgID}"/></div>
-								</c:forEach> --%>
-
-							<%-- <c:if test="${!empty messageList} ">
-								 roshan				
-							</c:if>
-							
-							<c:if test="${empty messageList} ">
-								 roshan2				
-							</c:if> --%>
-							
 							<c:choose>
 								<c:when test="${!empty messageList}">
 									<table border="0" class="table table-striped table-bordered ">
 										<tr>
 											<th width="40">Message ID</th>
 											<th width="80">Message</th>
-											 
 											<th width="60">Action</th>
 										</tr>
 										<c:forEach items="${messageList}" var="message">
 											<tr>
 												<td>${message.msgID}</td>
 												<td>${message.msgTitle}</td>
-												 
+
 												<td><a href="approvemessages/${message.msgID}">Approve</a></td>
 											</tr>
 										</c:forEach>
 									</table>
 								</c:when>
 								<c:otherwise>
-								
-								No data to show.
+									No data to show.
 								</c:otherwise>
 							</c:choose>
 						</div>

@@ -251,9 +251,9 @@ $(document).ready(function(){
 			<div class="col-md-2" style="background-color:#00AA9A">
 				<jsp:include page="leftMenu.jsp"></jsp:include>
 			</div>
-
-			<div class="col-md-10">	Message added successfully.</div>
-
+			<div class="col-md-10">
+				<c:out value="${errorMsg }" />
+			</div>
 		</div>
 	</div>
 

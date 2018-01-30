@@ -77,7 +77,6 @@ public class DBConnection {
 		try {
 			if (conn != null)
 				conn.close();
-			System.out.println("Connection Closed");
 		} catch (Exception ex) {
 			System.out.println("SQLException caught in DBConnection.java...");
 			ex.printStackTrace();
@@ -89,7 +88,6 @@ public class DBConnection {
 		try {
 			if (rs != null)
 				rs.close();
-			System.out.println("Connection Closed");
 		} catch (Exception ex) {
 			System.out.println("SQLException caught in DBConnection.java...");
 			ex.printStackTrace();
@@ -97,7 +95,6 @@ public class DBConnection {
 		try {
 			if (pst != null)
 				pst.close();
-			System.out.println("Connection Closed");
 		} catch (Exception ex) {
 			System.out.println("SQLException caught in DBConnection.java...");
 			ex.printStackTrace();
@@ -105,7 +102,6 @@ public class DBConnection {
 		try {
 			if (conn != null)
 				conn.close();
-			System.out.println("Connection Closed");
 		} catch (Exception ex) {
 			System.out.println("SQLException caught in DBConnection.java...");
 			ex.printStackTrace();

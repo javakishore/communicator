@@ -291,7 +291,6 @@ $(document).ready(function(){
 			</div>
 
 			<div class="col-md-10">
-
 				<div class="row border-bottom">
 					<nav class="navbar navbar-static-top" role="navigation"
 						style="margin-bottom: 0">
@@ -304,8 +303,7 @@ $(document).ready(function(){
 				</div>
 
 
-
-<div class="ibox-content">
+		<div class="ibox-content">
 					<div class="table-responsive">
 						
 								<table
@@ -316,6 +314,9 @@ $(document).ready(function(){
 											<th>Message ID</th>
 											<th>Category</th>
 											<th>Message</th>
+											<th>Channel</th>
+											<th>Creation Date</th>
+											<th>Reference No</th>
 											<th>Status</th>
 											<th>Action</th>
 
@@ -327,6 +328,9 @@ $(document).ready(function(){
 												<td>${message.msgID}</td>
 												<td>${message.favoriteid}</td>
 												<td align="left">${message.msgTitle}</td>
+												<td>${message.channelName}</td>
+												<td>${message.creationDate}</td>
+												<td>${message.referenceNo}</td>
 												<td>${message.msgStatus}</td>
 												<td align="center"><a
 													href="/crmCmsAdmin/viewmessage/${message.msgID}">View</a> / <a
@@ -334,8 +338,6 @@ $(document).ready(function(){
 													href="javascript:deleteMyMessage('${message.msgID}','${message.msgTitle}')">Delete</a></td>
 											</tr>
 										</c:forEach>
-
-
 
 									</tbody>
 
@@ -396,6 +398,7 @@ $(document).ready(function(){
         $(document).ready(function() {
             $('.dataTables-example').dataTable({
                 responsive: true,
+                "ordering": false,
                 "dom": 'T<"clear">lfrtip',
                 "tableTools": {
                     "sSwfPath": "<%=request.getContextPath()%>/resources/template/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
