@@ -517,7 +517,7 @@ $(document).ready(function(){
 <%-- </c:forEach> --%>
 
                                          
-						<c:if test="${user.userName=='admin' or user.userName=='superadmin'}">
+						<c:if test="${user.userName=='admin'}">
 							<select id ="allpamb" name="allpamb" class="form-control" multiple="multiple">
 										<option value="1">CENTRAL 1-DA</option>
 										<option value="2">CENTRAL 2-DA </option>
@@ -539,24 +539,7 @@ $(document).ready(function(){
 										<option selected value="18">PERAK-PAMB</option>
 									</select>
 									
-									
-									<%-- 
-									  <div class="form-group">
-								<label class="control-label col-sm-2">Region :</label>
-								<div class="col-sm-5">
-									<form:select path="" cssClass="form-control" id="zoneId">
-										<form:option value="">Select Zone  </form:option>
-										<c:if test="${!empty zoneList}">
-											<c:forEach items="${zoneList}" var="zone">
-												<form:option value="${zone.zoneId}">${zone.zoneName}</form:option>
-											</c:forEach>
-										</c:if>
-									</form:select>
-
-								</div>
-							</div>  --%>
-									
-									   <select id ="zone" name="zone" class="form-control" multiple="multiple">
+									<select id ="zone" name="zone" class="form-control" multiple="multiple">
 										<option value="1">CENTRAL 1-DA</option>
 										<option value="2">CENTRAL 2-DA </option>
 										<option value="3">EAST COAST-DA</option>
@@ -599,16 +582,82 @@ $(document).ready(function(){
 									</select> 
 							
 						</c:if >
-							<c:if test="${user.userName=='banca'}">
-						 <select id ="allpbtb" name="allpbtb" class="form-control" multiple="multiple">
-							    	<option value="1">BANCATAKAFUL-DA</option>
-										<option value="2">BANCATAKAFUL-PAMB</option>
-										<option value="3">BANCATAKAFUL-TFE </option>
-											</select> 
+						<c:if test="${ user.userName=='superadmin'}">
+							<select id ="allpamb" name="allpamb" class="form-control" multiple="multiple">
+										<option value="1">CENTRAL 1-DA</option>
+										<option value="2">CENTRAL 2-DA </option>
+										<option value="3">EAST COAST-DA</option>
+										<option value="4">BANCATAKAFUL-DA</option>
+										<option value="5">NORTH-DA</option>
+										<option value="6">BRANCH OFFICE(DIRECT)-DA</option>
+										<option value="7">SOUTH-DA </option>
+										<option value="8">SABAH/SARAWAK-DA </option>
+										<option selected value="9">BANCATAKAFUL-PAMB</option>
+										<option value="10">BANCATAKAFUL-TFE </option>
+										<option selected value="11">CENTRAL 1-PAMB</option>
+										<option selected value="12">CENTRAL 2-PAMB</option>
+										<option selected value="13">EAST COAST-PAMB</option>
+										<option selected value="14">NORTH-PAMB</option>
+										<option selected value="15">SOUTH-PAMB</option>
+										<option selected value="16">SABAH/SARAWAK-PAMB</option>
+										<option selected value="17">BRANCH OFFICE(DIRECT)-PAMB</option>
+										<option selected value="18">PERAK-PAMB</option>
+									</select>
+									
+									<select id ="zone" name="zone" class="form-control" multiple="multiple">
+										<option value="1">CENTRAL 1-DA</option>
+										<option value="2">CENTRAL 2-DA </option>
+										<option value="3">EAST COAST-DA</option>
+										<option value="4">BANCATAKAFUL-DA</option>
+										<option value="5">NORTH-DA</option>
+										<option value="6">BRANCH OFFICE(DIRECT)-DA</option>
+										<option value="7">SOUTH-DA </option>
+										<option value="8">SABAH/SARAWAK-DA </option>
+										<option value="9">BANCATAKAFUL-PAMB</option>
+										<option value="10">BANCATAKAFUL-TFE </option>
+										<option value="11">CENTRAL 1-PAMB</option>
+										<option value="12">CENTRAL 2-PAMB</option>
+										<option value="13">EAST COAST-PAMB</option>
+										<option value="14">NORTH-PAMB</option>
+										<option value="15">SOUTH-PAMB</option>
+										<option value="16">SABAH/SARAWAK-PAMB</option>
+										<option value="17">BRANCH OFFICE(DIRECT)-PAMB</option>
+										<option value="18">PERAK-PAMB</option>
+									</select> 
+									 
+									 <select id ="allpbtb" name="allpbtb" class="form-control" multiple="multiple">
+										<option selected value="1">CENTRAL 1-DA</option>
+										<option selected value="2">CENTRAL 2-DA </option>
+										<option selected value="3">EAST COAST-DA</option>
+										<option selected value="4">BANCATAKAFUL-DA</option>
+										<option selected value="5">NORTH-DA</option>
+										<option selected value="6">BRANCH OFFICE(DIRECT)-DA</option>
+										<option selected value="7">SOUTH-DA </option>
+										<option selected value="8">SABAH/SARAWAK-DA </option>
+										<option value="9">BANCATAKAFUL-PAMB</option>
+										<option value="10">BANCATAKAFUL-TFE </option>
+										<option value="11">CENTRAL 1-PAMB</option>
+										<option value="12">CENTRAL 2-PAMB</option>
+										<option value="13">EAST COAST-PAMB</option>
+										<option value="14">NORTH-PAMB</option>
+										<option value="15">SOUTH-PAMB</option>
+										<option value="16">SABAH/SARAWAK-PAMB</option>
+										<option value="17">BRANCH OFFICE(DIRECT)-PAMB</option>
+										<option value="18">PERAK-PAMB</option>
+									</select> 
+							
+						</c:if >
+						<c:if test="${user.userName=='banca'}">
+							<select id="allpbtb" name="allpbtb" class="form-control"
+								multiple="multiple">
+								<option value="1">BANCATAKAFUL-DA</option>
+								<option value="2">BANCATAKAFUL-PAMB</option>
+								<option value="3">BANCATAKAFUL-TFE</option>
+							</select>
 						</c:if>
-					
-								</div>
-							</div>  		  
+
+					  </div>
+					</div>  		  
 							<div class="form-group">
 								<label class="control-label col-sm-2">Channel :</label>
 								<div class="col-sm-5">
