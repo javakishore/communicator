@@ -690,6 +690,12 @@ $(document).ready(function(){
 									<form:errors path="category.categoryId"	cssClass="alert alert-danger ErrorMessage" />
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-2">Reference No:</label>
+								<div class="col-sm-5">
+									<input type="text" name="referenceNo" class="form-control" />
+								</div>
+							</div>
 
 							<div class="form-group">
 								<label class="control-label col-sm-2">English : </label>
