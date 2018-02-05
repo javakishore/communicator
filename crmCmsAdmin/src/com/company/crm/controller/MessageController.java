@@ -182,7 +182,7 @@ public class MessageController {
 			
 			String sql1="";
 			 if(strUserName.equalsIgnoreCase("admin") || strUserName.equalsIgnoreCase("banca")){
-			 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.categoryid desc";
+				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.categoryid desc";
 			 }
 			 else{
 				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 order by a.categoryid desc";
@@ -586,6 +586,31 @@ public class MessageController {
 		Connection conn = null;
 		try {
 			conn = DBConnection.getConnection();
+			
+			
+			String sqlGetZoneIds = "SELECT z.zone_name  FROM message_zone m,zone z where m.zone_id = z.zone_id and m.message_id =" + id;
+			Statement stmtGetZoneIds = conn.createStatement();
+			ResultSet resultSetGetZoneIds = stmtGetZoneIds.executeQuery(sqlGetZoneIds);
+			
+			ArrayList<String> zoneList = new ArrayList<String>();
+			while (resultSetGetZoneIds.next()) {
+				zoneList.add(resultSetGetZoneIds.getString("zone_name"));
+			}
+			model.addAttribute("zoneList",zoneList);
+			
+			String sqlGetCHANNEL_IDs = "SELECT c.channelname  FROM message_channel m,channel c where m.channel_id = c.channelid and m.message_id = "+ id;
+			Statement stmtGetCHANNEL_IDs = conn.createStatement();
+			ResultSet resultSetGetCHANNEL_IDs = stmtGetCHANNEL_IDs.executeQuery(sqlGetCHANNEL_IDs);
+			ArrayList<String> selChnList = new ArrayList<String>();
+			while (resultSetGetCHANNEL_IDs.next()) {
+
+				selChnList.add(resultSetGetCHANNEL_IDs.getString("channelname"));
+			}
+			
+			model.addAttribute("channelList",selChnList);
+			
+			
+			
 			String sql1 = "SELECT M.MESSAGE_ID, M.CREATED_AT,M.EXPIRY_AT,M.CATEGORY_ID,M.USERNAME,M.IS_DELETED,M.IS_EDITED,M.MSG_STATUS, MD.MESSAGE_DETAIL_ID, "
 					+ " MD.MESSAGE_DATA,MD.MESSAGE_TITLE, MD.MESSAGE_LANG,MD.MESSAGE_LINK,MD.MESSAGE_IMG_LINK, C.CATEGORYNAME,M.REFERENCE_NO "
 					+ " FROM MESSAGE M,MESSAGE_DETAILS MD,CATEGORY C WHERE C.CATEGORYID = M.CATEGORY_ID AND MD.MESSAGE_ID= "+ id + " AND M.MESSAGE_ID = " + id;
@@ -650,6 +675,7 @@ public class MessageController {
 				msgObj.setReferenceNo(refNo);
 				messageArray.add(msgObj);
 				model.addAttribute("categoryId", category_Id);
+				model.addAttribute("categoryName",resultSet.getString("CATEGORYNAME"));
 
 			}
 			model.addAttribute("messageData", messageArray.get(0).getMsgData());
@@ -678,13 +704,37 @@ public class MessageController {
 	public String EditMessage(@PathVariable("id") int id, Model model,
 			HttpSession session) {
 		Connection conn = null;
+		Message message = new Message();
 		try {
-			List<Category> categoryList = messageService.getCategoryList();
+			conn = DBConnection.getConnection();
+			//List<Category> categoryList = messageService.getCategoryList();
+			List<Category> categoryList = new ArrayList<Category>();
+			User user1 = (User) session.getAttribute("user");
+			String strUserName=user1.getUserName();
+			String sql1="";
+			 if(strUserName.equalsIgnoreCase("admin") || strUserName.equalsIgnoreCase("banca")){
+				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.categoryid desc";
+			 }
+			 else{
+				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 order by a.categoryid desc";
+			 }
+			
+			Statement stmt1 = conn.createStatement();
+			ResultSet resultSet1 = stmt1.executeQuery(sql1);
+
+			while (resultSet1.next()) {
+				int categoryId1 = resultSet1.getInt("categoryid");
+				String categoryName = String.valueOf(resultSet1.getString("categoryname"));
+				String isapproved = String.valueOf(resultSet1.getInt("isapproved")).equalsIgnoreCase("0") ? "Pending" : "Approved";
+				
+				categoryList.add(new Category(categoryId1, categoryName, isapproved));
+
+			}
+			
 			model.addAttribute("categoryList", categoryList);
 
 			// get Zones
 			List<Zone> zoneList = new ArrayList<Zone>();
-			conn = DBConnection.getConnection();
 
 			String sql = "select * from zone";
 
@@ -692,7 +742,7 @@ public class MessageController {
 			ResultSet resultSetZone = stmtZone.executeQuery(sql);
 			while (resultSetZone.next()) {
 				zoneList.add(new Zone(resultSetZone.getInt("ZONE_ID"),
-						resultSetZone.getString("ZONE_NAME")));
+				resultSetZone.getString("ZONE_NAME")));
 			}
 
 			model.addAttribute("zoneList", zoneList);
@@ -721,11 +771,16 @@ public class MessageController {
 			Statement stmtGetZoneIds = conn.createStatement();
 			ResultSet resultSetGetZoneIds = stmtGetZoneIds.executeQuery(sqlGetZoneIds);
 			
+			ArrayList<String> zone = new ArrayList<String>();
+			
 			while (resultSetGetZoneIds.next()) {
 
 				zoneIds += String
 						.valueOf(resultSetGetZoneIds.getInt("ZONE_ID")) + ",";
+				zone.add(resultSetGetZoneIds.getString("ZONE_ID"));
 			}
+			message.setZone(zone);
+			
 			if (!zoneIds.equals("")) {
 				zoneIds = zoneIds.substring(0, zoneIds.length() - 1);
 			}
@@ -733,11 +788,15 @@ public class MessageController {
 			String sqlGetCHANNEL_IDs = "select CHANNEL_ID from MESSAGE_CHANNEL where MESSAGE_ID="+ id;
 			Statement stmtGetCHANNEL_IDs = conn.createStatement();
 			ResultSet resultSetGetCHANNEL_IDs = stmtGetCHANNEL_IDs.executeQuery(sqlGetCHANNEL_IDs);
-			
+			ArrayList<String> selChnList = new ArrayList<String>();
 			while (resultSetGetCHANNEL_IDs.next()) {
 
 				CHANNEL_IDs += String.valueOf(resultSetGetCHANNEL_IDs.getInt("CHANNEL_ID")) + ",";
+				selChnList.add(resultSetGetCHANNEL_IDs.getString("CHANNEL_ID"));
 			}
+			
+			message.setChannel(selChnList);
+			
 			if (!CHANNEL_IDs.equals("")) {
 				CHANNEL_IDs = CHANNEL_IDs
 						.substring(0, CHANNEL_IDs.length() - 1);
@@ -912,7 +971,8 @@ public class MessageController {
 		}finally{
 			DBConnection.closeConnection(conn);
 		}
-
+		
+		model.addAttribute("message",message);
 		
 		return "editmessage";
 

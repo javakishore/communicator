@@ -266,7 +266,7 @@ $(document).ready(function(){
 				<li><a class="back-btn" href="/crm/mymessages">Back</a></li>
 			</ul>
 		</div> -->
-		<h2 class="title" style="color:white">Edit Message ${testMessage}</h2>
+		<h2 class="title" style="color:white">View Message ${testMessage}</h2>
 	</div>
 	<div class="clear_both">&nbsp;</div>
 
@@ -283,11 +283,32 @@ $(document).ready(function(){
 						<form:form name="addmessage" action="editmessage" method="post"
 							commandName="message" enctype="multipart/form-data"
 							cssClass="form-horizontal" onSubmit="return validateForm()">
-
+						<div class="form-group">
+							<label class="control-label col-sm-2">Region :</label>
+							<div class="col-sm-5">
+								<select name="zone" id="zone" class="form-control" multiple="multiple" name="category"
+										class="form-control" readonly="readonly" style="background-color: #d3d3d3;">
+									<c:forEach items="${zoneList}" var="zone">
+										<option value="${zone}" selected="selected"> ${zone}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-2">Channel :</label>
+							<div class="col-sm-5">
+								<select name="zone" id="zone" class="form-control" name="category"
+										class="form-control" readonly="readonly" style="background-color: #d3d3d3;">
+									<c:forEach items="${channelList}" var="channel">
+										<option value="${channel}" selected="selected"> ${channel}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2">Category :</label>
 								<div class="col-sm-5">
-									<input style="background-color: #d3d3d3;" name="category"
+									<input style="background-color: #d3d3d3;" name="category" style="background-color: #d3d3d3;"
 										class="form-control" value="${categoryName}"
 										readonly="readonly" />
 								</div>
@@ -295,7 +316,7 @@ $(document).ready(function(){
 							<div class="form-group">
 								<label class="control-label col-sm-2">Reference No:</label>
 								<div class="col-sm-5">
-									<input type="text" value="${referenceNo}"
+									<input type="text" value="${referenceNo}" class="form-control" style="background-color: #d3d3d3;"
 										readonly="readonly" class="form-control" />
 								</div>
 							</div>

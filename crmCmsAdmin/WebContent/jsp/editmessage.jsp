@@ -268,29 +268,29 @@ $(document).ready(function(){
 						<input type="hidden" name="selectedZoneIds" id="selectedZoneIds" class="form-control" value="${zoneIds}"/>
 						<input type="hidden" name="selectedCHANNEL_IDs" id="selectedCHANNEL_IDs" class="form-control" value="${CHANNEL_IDs}"/>
 						<div class="form-group">
-							<label class="control-label col-sm-2">Zone :</label>
+							<label class="control-label col-sm-2">Region :</label>
 							<div class="col-sm-5">
-								<select name="zone" id="zone" class="form-control" multiple="multiple">
+								<form:select name="zone" id="zoneIds" class="form-control" multiple="multiple" path="">
 									<c:forEach items="${zoneList}" var="zone">
 										<option value="${zone.zoneId}"> ${zone.zoneName}</option>
 									</c:forEach>
-								</select>
+								</form:select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="control-label col-sm-2">Channel :</label>
 							<div class="col-sm-5">
-								<select name="channel" id="channel" class="form-control" multiple="multiple">
+								<form:select name="channel" id="channel" class="form-control" path="">
 									<c:forEach items="${channelList}" var="channel">
 										<option value="${channel.channelId}"> ${channel.channelName}</option>
 									</c:forEach>
-								</select>
+								</form:select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="control-label col-sm-2"> Category :</label>
 							<div class="col-sm-5">
-								<select id="categoryId" class="form-control" name="category.categoryId">
+								<form:select id="categoryId" class="form-control" name="category.categoryId" path="">
 									<c:forEach items="${categoryList}" var="category">
 										<c:choose>
 											<c:when test="${category.categoryId == categoryId}">
@@ -301,7 +301,7 @@ $(document).ready(function(){
 											</c:otherwise>
 										</c:choose>
 									</c:forEach>
-								</select>
+								</form:select>
 							</div>
 						</div>
 						<div class="form-group">
@@ -309,7 +309,7 @@ $(document).ready(function(){
 								<div class="col-sm-5">
 									<input type="text" name="referenceNo" class="form-control" value="${referenceNo }" />
 								</div>
-							</div>
+						</div>
 						<div class="form-group">
 							<label class="control-label col-sm-2">English :</label>
 						</div>
