@@ -97,7 +97,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zeropush-android-1.1.2.Final.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zeropush-api-1.1.2.Final.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zeropush-model-1.1.2.Final.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_80">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>

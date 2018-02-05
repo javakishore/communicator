@@ -1820,7 +1820,7 @@ public class MessageController {
 				  sql = "select * from message_details md,message m,user_m u  where Message_LANG=1 and m.message_id = md.message_id and u.userid = m.username and u.username='"+strUserName+"' and m.MESSAGE_ID IN (select MESSAGE_ID from message where MSG_STATUS=0 and IS_DELETED=0) order by md.message_id desc";
 			 }
 			 else{
-				  sql = "select * from message_details  where Message_LANG=1  and MESSAGE_ID IN (select MESSAGE_ID from message where MSG_STATUS=0 and IS_DELETED=0) order by md.message_id desc";
+				  sql = "select * from message_details md where Message_LANG=1  and MESSAGE_ID IN (select MESSAGE_ID from message where MSG_STATUS=0 and IS_DELETED=0) order by md.message_id desc";
 			 }
 
 			Statement stmt = conn.createStatement();
