@@ -16,30 +16,106 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/bootstrap-datetimepicker.js"></script>
 
 <script>
+function loadCategoryfilter() {
+	
+	var e = document.getElementById("channelId");
+	var id = e.options[e.selectedIndex].value;
+	
+	//alert(" id "+id );
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		 	    if (xhttp.readyState == 4 && xhttp.status == 200) {
+	     //alert(" SUCESSS XXXXXXXXXX 11 ");
+	  //alert("response text 4 "+xhttp.responseText);
+	      var serverdata = xhttp.responseText;
+		  var selectelement=document.getElementById("categoryId");
+		  var str_array = serverdata.split(':');
+		  var str_array2=[];
+		 
+		 
+		  var len=0;
+		  var j=0;
+		  //alert(" selct length "+selectelement.length);
+		  var selectlength = selectelement.length;
+		  for (var i = 0; i < selectlength; ++i) {
+			  //alert("select optionremove  "+selectelement.options[i].text);
+	          //sselectelement.remove(i);
+	          selectelement.options[i].text="";
+	          selectelement.options[i].value="";
+	           };
+
+		  for(var i = 0; i < str_array.length; i++) {
+		     // Trim the excess whitespace.
+		     str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+		     // Add additional code here, such as:
+		     //alert(str_array[i]);
+		     if(str_array[i].length>0)
+		    	 {
+		    	 len = len +1;
+		    	 str_array2[j]=str_array[i];
+		    	 j++;
+		    	 }
+		     //selectelement.options[i].value = str_array[i]+"xxxxx";
+		  }
+		  for(var i = 0; i < str_array2.length; i++) {
+			    //alert("GOT VALUE aaaaaa  "+str_array2[i]);
+			    
+			  }
+		  selectelement.size = str_array2.length;
+		  //alert("selectelement "+selectelement)
+		  for (var i = 0; i < str_array2.length; ++i) {
+				  selectelement.options[i].text="";
+				  selectelement.options[i].value="";
+					
+	        };
+	        var str_array3=[];
+		  for (var i = 0; i < str_array2.length; ++i) {
+			//alert("str_array2 [i] " +str_array2[i])
+			  str_array3 = str_array2[i].split('_');
+			  var selVal = str_array2[i] ;
+			   //alert("str_array3[0]  "+str_array3[0]);
+			   //alert("str_array3[1]  "+str_array3[1]);
+			   
+			          selectelement.options[i].value = str_array3[0];
+			          selectelement.options[i].text = selVal.substr(selVal.indexOf("_")+1);
+					  
+			 };
+	    
+		     //alert(" SUCESSS XXXXXXXXXX 22 ");
+		 	
+	    }
+	  }
+	  xhttp.open("GET", "allcategoryfilter/"+id, true);
+	  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	  xhttp.send("id="+id);
+	  
+
+	
+ }
 	function validateForm() {
 		if (document.addmessage.headlineName.value == "") {
-			alert("Please enter Headline Name");
+			alert("Please enter Headline for English");
 			document.addmessage.headlineName.focus();
 			return false;
 		} else if (document.addmessage.messageName.value == "") {
-			alert("Please enter Message");
+			alert("Please enter Message for English");
 			document.addmessage.messageName.focus();
 			return false;
-		} /* else if (document.addmessage.headlineName1.value == "") {
-			alert("Please enter Headline Name");
+		} else if (document.addmessage.headlineName1.value == "") {
+			alert("Please enter Headline Name for Bahasa");
 			document.addmessage.headlineName1.focus();
 			return false;
 		} else if (document.addmessage.messageName1.value == "") {
-			alert("Please enter Message");
+			alert("Please enter Message for Bahasa");
 			document.addmessage.messageName1.focus();
-			return false;
-		} */ else if (document.addmessage.expdate.value == "") {
-			alert("Please enter expiry date");
-			document.addmessage.expdate.focus();
 			return false;
 		} else if (document.addmessage.effdate.value == "") {
 			alert("Please enter effective date");
 			document.addmessage.effdate.focus();
+			return false;
+		} else if (document.addmessage.expdate.value == "") {
+			alert("Please enter expiry date");
+			document.addmessage.expdate.focus();
 			return false;
 		}
 	}
@@ -240,7 +316,7 @@ $(document).ready(function(){
 			<div class="right-block pull-right" style="padding: 10px 15px;">
 				<h3 class="user-intro pull-left">Welcome,${user.userName}!</h3>
 				<div class="logout-box pull-left">
-					<a id="login" style="color:#3c3434;background-color:white;border-radius:5px;border-color:#E70028" class="btn btn-logout anchor3" href="/crmCmsAdmin/logout.htm">Logout</a></div>				</div>
+					<div class="logout-box pull-left"><a id="login" style="color:#3c3434;background-color:white;border-radius:5px;border-color:#E70028" class="btn btn-logout anchor3" href="/crmCmsAdmin/logout.htm">Logout</a></div>
 				</div>
 				<div class="clear_both">&nbsp;</div>
 			</div>
@@ -280,31 +356,35 @@ $(document).ready(function(){
 						<div class="form-group">
 							<label class="control-label col-sm-2">Channel :</label>
 							<div class="col-sm-5">
-								<form:select name="channel" id="channel" class="form-control" path="">
-									<c:forEach items="${channelList}" var="channel">
-										<option value="${channel.channelId}"> ${channel.channelName}</option>
-									</c:forEach>
+								<form:select path="" cssClass="form-control" id="channelId" name="channelId" onchange="loadCategoryfilter();">
+								<option value="1">---Select---</option>
+									 <c:if test="${!empty channelList}">
+										<c:forEach items="${channelList}" var="channel">
+											<form:option value="${channel.channelId}">${channel.channelName}</form:option>
+										</c:forEach>
+									</c:if>
 								</form:select>
+									
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-2"> Category :</label>
-							<div class="col-sm-5">
-								<form:select id="categoryId" class="form-control" name="category.categoryId" path="">
-									<c:forEach items="${categoryList}" var="category">
-										<c:choose>
-											<c:when test="${category.categoryId == categoryId}">
-												<option value="${category.categoryId}" selected> ${category.categoryName}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${category.categoryId}"> ${category.categoryName}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-								</form:select>
+							<div class="form-group">
+								<label class="control-label col-sm-2">Category :</label>
+								<div class="col-sm-5">
+									<form:select  path="category.categoryId" cssClass="form-control" id="categoryId" name="categoryId">
+										<c:if test="${!empty categoryList}">
+											<c:forEach items="${categoryList}" var="category">
+												<form:option value="${category.categoryId}">${category.categoryName}</form:option>
+											</c:forEach>
+										</c:if>
+									</form:select>
+									
+									<%-- <form:select class="form-control" id="categoryId" path="">
+    									<form:option value="-" label="--Select category--"/>
+									</form:select> --%>
+									<form:errors path="category.categoryId"	cssClass="alert alert-danger ErrorMessage" />
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
+							<div class="form-group">
 								<label class="control-label col-sm-2">Reference No:</label>
 								<div class="col-sm-5">
 									<input type="text" name="referenceNo" class="form-control" value="${referenceNo }" />
@@ -450,7 +530,6 @@ $(document).ready(function() {
 		}
 	});
 });	
-
 function bodyload(){
 	
 		
@@ -500,7 +579,6 @@ function fetchZoneSelections_withEqualityCheck(zoneSelections){
 	}
 }
 /* Update multiple selection elements ends : Prashant Shinde*/
-
 $(function() {
 	setTimeout(function(){ 
 		$(".form_datetime").datetimepicker({
@@ -526,30 +604,24 @@ $(function() {
 			}
 		});
 	});
-
 	function readURL(input, id) {
 		if (input.files && input.files[0]) {
 			var reader = new FileReader();
-
 			reader.onload = function(e) {
 				$(id).attr('src', e.target.result);
 				$(id).removeClass('add');
 			}
-
 			reader.readAsDataURL(input.files[0]);
 		}
 	}
-
 	$("#img1").change(function() {
 		$("#blah1").removeClass('add');
 		readURL(this, "#blah1");
 	});
-
 	$("#img3").change(function() {
 		$("#blah3").removeClass('add');
 		readURL(this, "#blah3");
 	});
-
 	function ValidateFileUpload() {
 		var fuData = document.getElementById('img3');
 		var FileUploadPath = fuData.value;
@@ -563,7 +635,6 @@ $(function() {
 				// To Display
 				if (fuData.files && fuData.files[0]) {
 					var reader = new FileReader();
-
 					reader.onload = function(e) {
 						$('#blah3').attr('src', e.target.result);
 					}
