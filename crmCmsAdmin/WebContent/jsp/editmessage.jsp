@@ -20,14 +20,21 @@ function loadCategoryfilter() {
 	
 	var e = document.getElementById("channelId");
 	var id = e.options[e.selectedIndex].value;
+	var ajaxPath = '<%=request.getContextPath()%>/allcategoryfilter/'+id;
+	$.ajax({
+		  url: ajaxPath,
+		  type:'GET',
+		  success: function(data){
+			  doSomething(data);
+		  }
+		});
 	
-	//alert(" id "+id );
-	  var xhttp = new XMLHttpRequest();
-	  xhttp.onreadystatechange = function() {
-		 	    if (xhttp.readyState == 4 && xhttp.status == 200) {
-	     //alert(" SUCESSS XXXXXXXXXX 11 ");
-	  //alert("response text 4 "+xhttp.responseText);
-	      var serverdata = xhttp.responseText;
+	//var xhttp = new XMLHttpRequest();
+	//xhttp.onreadystatechange = function() {
+	//if (xhttp.readyState == 4 && xhttp.status == 200) {
+	    
+	      //var serverdata = xhttp.responseText;
+	function doSomething(serverdata){	      
 		  var selectelement=document.getElementById("categoryId");
 		  var str_array = serverdata.split(':');
 		  var str_array2=[];
@@ -35,14 +42,13 @@ function loadCategoryfilter() {
 		 
 		  var len=0;
 		  var j=0;
-		  //alert(" selct length "+selectelement.length);
+		  
 		  var selectlength = selectelement.length;
 		  for (var i = 0; i < selectlength; ++i) {
-			  //alert("select optionremove  "+selectelement.options[i].text);
-	          //sselectelement.remove(i);
+			  
 	          selectelement.options[i].text="";
 	          selectelement.options[i].value="";
-	           };
+	      };
 
 		  for(var i = 0; i < str_array.length; i++) {
 		     // Trim the excess whitespace.
@@ -50,19 +56,16 @@ function loadCategoryfilter() {
 		     // Add additional code here, such as:
 		     //alert(str_array[i]);
 		     if(str_array[i].length>0)
-		    	 {
+		   	 {
 		    	 len = len +1;
 		    	 str_array2[j]=str_array[i];
 		    	 j++;
-		    	 }
+		    }
 		     //selectelement.options[i].value = str_array[i]+"xxxxx";
 		  }
-		  for(var i = 0; i < str_array2.length; i++) {
-			    //alert("GOT VALUE aaaaaa  "+str_array2[i]);
-			    
-			  }
+		 
 		  selectelement.size = str_array2.length;
-		  //alert("selectelement "+selectelement)
+		  
 		  for (var i = 0; i < str_array2.length; ++i) {
 				  selectelement.options[i].text="";
 				  selectelement.options[i].value="";
@@ -70,24 +73,20 @@ function loadCategoryfilter() {
 	        };
 	        var str_array3=[];
 		  for (var i = 0; i < str_array2.length; ++i) {
-			//alert("str_array2 [i] " +str_array2[i])
+			
 			  str_array3 = str_array2[i].split('_');
 			  var selVal = str_array2[i] ;
-			   //alert("str_array3[0]  "+str_array3[0]);
-			   //alert("str_array3[1]  "+str_array3[1]);
 			   
 			          selectelement.options[i].value = str_array3[0];
 			          selectelement.options[i].text = selVal.substr(selVal.indexOf("_")+1);
 					  
 			 };
-	    
-		     //alert(" SUCESSS XXXXXXXXXX 22 ");
 		 	
 	    }
-	  }
-	  xhttp.open("GET", "allcategoryfilter/"+id, true);
-	  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	  xhttp.send("id="+id);
+	 // }
+	 // xhttp.open("GET", "./allcategoryfilter/"+id, true);
+	  //xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	 // xhttp.send("id="+id);
 	  
 
 	

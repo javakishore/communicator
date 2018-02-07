@@ -95,65 +95,6 @@ public class MessageController {
 
 	}
 
-	/*@RequestMapping(value = URIConstants.ADD_MESSAGES, method = RequestMethod.GET)
-	public String message(Model model, HttpSession session) {
-
-		//List<Category> categoryList = messageService.getCategoryList();
-		//model.addAttribute("categoryList", categoryList);
-		model.addAttribute("message", new Message());
-		List<Zone> zoneList = new ArrayList<Zone>();
-		List<Channel> channelList = new ArrayList<Channel>();
-		List<Category> categoryList = new ArrayList<Category>();
-		
-		// get Zones
-		try {
-			Class.forName(constantDb.driverClassName);
-			Connection conn = DriverManager.getConnection(constantDb.databaseUrl, constantDb.username,constantDb.password);
-
-			String sql = "select * from zone";
-
-			Statement stmt = conn.createStatement();
-			ResultSet resultSet = stmt.executeQuery(sql);
-			while (resultSet.next()) {
-				zoneList.add(new Zone(resultSet.getInt("ZONE_ID"), resultSet
-						.getString("ZONE_NAME")));
-			}
-
-			String sql1 = "select * from channel where isapproved = 1";
-
-			Statement stmt1 = conn.createStatement();
-			ResultSet resultSet1 = stmt1.executeQuery(sql1);
-			while (resultSet1.next()) {
-				channelList.add(new Channel(resultSet.getInt("channelid"), resultSet
-						.getString("CHANNELNAME")));
-			}
-
-			String sql2 = "select * from category where isapproved = 1";
-
-			Statement stmt2 = conn.createStatement();
-			ResultSet resultSet2 = stmt2.executeQuery(sql2);
-			while (resultSet2.next()) {
-				categoryList.add(new Category(resultSet2.getInt("categoryid"), resultSet2.getString("categoryNAME")));
-			}
-			
-			model.addAttribute("categoryList", categoryList);
-			model.addAttribute("channelList", channelList);
-			model.addAttribute("zoneList", zoneList);
-			model.addAttribute("zone", new Zone());
-		} catch (ClassNotFoundException e) {
-			
-			e.printStackTrace();
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-		}
-
-		model.addAttribute("messageName", "name");
-		return "addmessage";
-	}
-*/
-	
-	//commented by bilal 28-04-17 
 	
 	@RequestMapping(value = URIConstants.ADD_MESSAGES, method = RequestMethod.GET)
 	//@ResponseBody
@@ -188,7 +129,6 @@ public class MessageController {
 				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 order by a.categoryid desc";
 			 }
 			
-			//String sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.categoryid";
 			Statement stmt1 = conn.createStatement();
 			ResultSet resultSet1 = stmt1.executeQuery(sql1);
 
@@ -209,7 +149,6 @@ public class MessageController {
 				 sql2=" select a.channelid,a.channelname,a.isapproved from channel a where nvl(a.isapproved,0) = 1 order by a.channelid desc";
 			 }
 			
-			//String sql2=" select a.channelid,a.channelname,a.isapproved from channel a where nvl(a.isapproved,0) = 1 order by a.channelid";
 			Statement stmt2 = conn.createStatement();
 			ResultSet resultSet2 = stmt2.executeQuery(sql2);
 
@@ -750,13 +689,23 @@ public class MessageController {
 			// get Channels
 			List<Channel> channelList = new ArrayList<Channel>();
 
-			String sqlChannel = "select * from channel";
+			String sql2="";
+			 if(strUserName.equalsIgnoreCase("admin") || strUserName.equalsIgnoreCase("banca")){
+				 sql2=" select a.channelid,a.channelname,a.isapproved from channel a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.channelid desc";
+			 }else{
+				 sql2=" select a.channelid,a.channelname,a.isapproved from channel a where nvl(a.isapproved,0) = 1 order by a.channelid desc";
+			 }
+			
+			Statement stmt2 = conn.createStatement();
+			ResultSet resultSet2 = stmt2.executeQuery(sql2);
 
-			Statement stmtChannel = conn.createStatement();
-			ResultSet resultSetChannel = stmtChannel.executeQuery(sqlChannel);
-			while (resultSetChannel.next()) {
-				channelList.add(
-						new Channel(resultSetChannel.getInt("CHANNELID"), resultSetChannel.getString("CHANNELNAME")));
+			while (resultSet2.next()) {
+				int channelid1 = resultSet2.getInt("channelid");
+				String channelname = String.valueOf(resultSet2.getString("channelname"));
+				String isapproved = String.valueOf(resultSet2.getInt("isapproved")).equalsIgnoreCase("0") ? "Pending" : "Approved";
+				
+				channelList.add(new Channel(channelid1, channelname, isapproved));
+
 			}
 
 			model.addAttribute("channelList", channelList);
@@ -3263,13 +3212,14 @@ public class MessageController {
 	/* Added by Sudd Starts */
 	
 	
+	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "allcategoryfilter/{id}", method = RequestMethod.GET)
 	public void allcategoryfilter(@PathVariable("id") String id , HttpServletResponse res) {
 	    String returnResult="";
-		System.out.println("xxxxxxxxxxxx allcategoryfilter: channel id " + id);
+		System.out.println("GET >> allcategoryfilter: channel id :[" + id+"] Started.");
 		
 		List<Category> categoryList = new ArrayList<Category>();
-		List<Integer> categoryIdList = new ArrayList<Integer>();
+		
 		JSONObject obj = new JSONObject();
 		Connection conn = null;
 		try {
@@ -3277,78 +3227,49 @@ public class MessageController {
 			
 			int categoryid=0;
 			
-			String sql = "select a.categoryid from map_channel_category a " +
-  		   " where a.channelid = " + id;
-			System.out.println("xxxxxxxxxxxx allcategoryfilter: sql " + sql);
+			String sql = "select a.categoryid from map_channel_category a  where a.channelid = " + id;
 					
 			Statement stmt3 = conn.createStatement();
 			ResultSet resultSet3 = stmt3.executeQuery(sql);
-
+			String mapedCatgrs = "";
 			while (resultSet3.next()) {
 				categoryid = resultSet3.getInt("categoryid");
-				categoryIdList.add(categoryid);
-				System.out.println("xxxxxxxxxxxx allcategoryfilter: categoryid " + categoryid);
+				mapedCatgrs = mapedCatgrs+categoryid+",";
 			}
+			System.out.println(" Mapped Categories: >> "+mapedCatgrs);
 			
-		String 	sqlcategoryidlist="";
-		for (Iterator iterator = categoryIdList.iterator(); iterator.hasNext();) {
-			Integer integer = (Integer) iterator.next();
-			if(iterator.hasNext())
-			{
-			sqlcategoryidlist = sqlcategoryidlist + " a.categoryid="+integer+" OR ";
-			System.out.println("xxxxxxxxxxxx if allcategoryfilter: sqlcategoryidlist " + sqlcategoryidlist);
-			
-			}
-			else 
-			{
-				sqlcategoryidlist = sqlcategoryidlist + " a.categoryid="+integer;
-				System.out.println("xxxxxxxxxxxx else allcategoryfilter: sqlcategoryidlist " + sqlcategoryidlist);
-			}
-		}
-		System.out.println("xxxxxxxxxxxx allcategoryfilter: final sqlcategoryidlist " + sqlcategoryidlist);
+			if(!mapedCatgrs.isEmpty()) {
+				
+				String sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and a.categoryid in ("+mapedCatgrs.substring(0, mapedCatgrs.length()-1)+") order by a.categoryid desc";
+				System.out.println("allcategoryfilter: sql1 " + sql1);
+				Statement stmt1 = conn.createStatement();
+				ResultSet resultSet1 = stmt1.executeQuery(sql1);
+				
+		      int key=0;
+			   while (resultSet1.next()) {
+				   
+					int categoryId1 = resultSet1.getInt("categoryid");
+					String categoryName = String.valueOf(resultSet1.getString("categoryname"));
+					String isapproved = String.valueOf(resultSet1.getInt("isapproved")).equalsIgnoreCase("0") ? "Pending" : "Approved";
+					
+					returnResult = returnResult+ ":"+categoryId1+"_"+categoryName+":";
+				}
+				System.out.println("GET >> allcategoryfilter: final result list ["+ returnResult +"] END");
+	
+				try {       
+			        PrintWriter out = res.getWriter();
+			        out.println(""+returnResult);
+			        out.close();
+			    } catch (IOException ex) { 
+			        ex.printStackTrace();
+			    }
 		
-		//String sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and a.categoryid="+categoryid+" order by a.categoryid";
-		if(!sqlcategoryidlist.isEmpty())
-		{
-		String sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and ( "+sqlcategoryidlist+") order by a.categoryid desc";
-		System.out.println("xxxxxxxxxxxx allcategoryfilter: sql1 " + sql1);
-		Statement stmt1 = conn.createStatement();
-		ResultSet resultSet1 = stmt1.executeQuery(sql1);
-		
-      int key=0;
-	   while (resultSet1.next()) {
-			int categoryId1 = resultSet1.getInt("categoryid");
-			String categoryName = String.valueOf(resultSet1.getString("categoryname"));
-			String isapproved = String.valueOf(resultSet1.getInt("isapproved")).equalsIgnoreCase("0") ? "Pending" : "Approved";
-			System.out.println("xxxxxxxxxxxx allcategoryfilter: categoryid " + categoryid+"name  "+categoryName+" is approved "+isapproved);
-			returnResult = returnResult+ ":"+categoryId1+"_"+categoryName+":";
-			//categoryList.add(new Category(categoryId1, categoryName, isapproved));
-			  //obj.put("name"+key, categoryName);
-			  //key=key+1;
-
-		}
-			//model.addAttribute("categoryList", categoryList);
-			System.out.println("YYYYYYYY xxxxxxxxxxxx allcategoryfilter: final result list "+returnResult);
-			System.out.println("YYYYYYYY xxxxxxxxxxxx allcategoryfilter: final json string "+obj);
-			//model.addAttribute("CateList",returnResult);
-			try {       
-		        PrintWriter out = res.getWriter();
-		        out.println(""+returnResult);
-		        out.close();
-		    } catch (IOException ex) { 
-		        ex.printStackTrace();
-		    }
-		
-		}
+		  }
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
 			DBConnection.closeConnection(conn);
 		}
-
-		
-		// model.addAttribute("testresult", new Message());
-		//return returnResult;
 	}
 	
 	
