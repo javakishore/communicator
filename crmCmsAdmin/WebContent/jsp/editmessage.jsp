@@ -248,11 +248,7 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<div class="title-bar" style="    background-color:#E70028;margin: 0px;">
-		<!-- <div class="tools-box">
-			<ul class="tool-list">
-				<li><a class="back-btn" href="/crm/mymessages">Back</a></li>
-			</ul>
-		</div> -->
+		
 		<h2 class="title" style="color:white">Edit Message ${testMessage}</h2>
 	</div>
 	<div class="clear_both">&nbsp;</div>
