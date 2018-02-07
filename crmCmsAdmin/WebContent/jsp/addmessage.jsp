@@ -195,41 +195,40 @@ function loadCategoryfilter() {
 
 
 
+function loadDoc() {
+	
+	var e = document.getElementById("region1");
+	var strUser = e.options[e.selectedIndex].value;
+	
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (xhttp.readyState == 4 && xhttp.status == 200) {
+	      //document.getElementById("region1").innerHTML = xhttp.responseText;
+	  //    alert("document.getElementById"+strUser);
+	    }
+	  }
+	  xhttp.open("GET", "allregion/"+strUser, true);
+	  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	  xhttp.send("id="+strUser);
+	  
 
-	function loadDoc() {
-
-		var e = document.getElementById("region1");
-		var strUser = e.options[e.selectedIndex].value;
-
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				//document.getElementById("region1").innerHTML = xhttp.responseText;
-				//    alert("document.getElementById"+strUser);
-			}
-		}
-		xhttp.open("GET", "allregion/" + strUser, true);
-		xhttp.setRequestHeader("Content-type",
-				"application/x-www-form-urlencoded");
-		xhttp.send("id=" + strUser);
-
-		if (strUser == 'PAMB') {
-			document.getElementById('allpamb').style.display = 'block';
-			document.getElementById('allpbtb').style.display = 'none';
-			document.getElementById('zone').style.display = 'none';
-		} else if (strUser == 'PBTB') {
-			document.getElementById('allpamb').style.display = 'none';
-			document.getElementById('allpbtb').style.display = 'block';
-			document.getElementById('zone').style.display = 'none';
-		} else if (strUser == 'BANCA') {
-			document.getElementById('banca').style.display = 'none';
-		}
-
-		else {
-			document.getElementById('allpamb').style.display = 'none';
-			document.getElementById('allpbtb').style.display = 'none';
-			document.getElementById('zone').style.display = 'block';
-		}
+	if(strUser == 'PAMB'){
+		 document.getElementById('allpamb').style.display='block';
+		 document.getElementById('allpbtb').style.display='none';
+		 document.getElementById('zone').style.display='none';
+    }else if(strUser == 'PBTB'){
+    	 document.getElementById('allpamb').style.display='none';
+		 document.getElementById('allpbtb').style.display='block';
+		 document.getElementById('zone').style.display='none';
+        }else if(strUser == 'BANCA'){
+        	document.getElementById('banca').style.display='none';
+   			  }
+    	
+	else
+	{
+		document.getElementById('allpamb').style.display='none';
+		 document.getElementById('allpbtb').style.display='none';
+		 document.getElementById('zone').style.display='block';	}
 	}
 
 	function validateForm() {
@@ -241,7 +240,7 @@ function loadCategoryfilter() {
 			alert("Please enter Message for English");
 			document.addmessage.messageName.focus();
 			return false;
-		} else if (document.addmessage.headlineName1.value == "") {
+		}  else if (document.addmessage.headlineName1.value == "") {
 			alert("Please enter Headline Name for Bahasa");
 			document.addmessage.headlineName1.focus();
 			return false;
@@ -249,16 +248,20 @@ function loadCategoryfilter() {
 			alert("Please enter Message for Bahasa");
 			document.addmessage.messageName1.focus();
 			return false;
-		} else if (document.addmessage.effdate.value == "") {
+		} 
+		else if (document.addmessage.effdate.value == "") {
 			alert("Please enter effective date");
 			document.addmessage.effdate.focus();
 			return false;
-		} else if (document.addmessage.expdate.value == "") {
+		}
+		else if (document.addmessage.expdate.value == "") {
 			alert("Please enter expiry date");
 			document.addmessage.expdate.focus();
 			return false;
-		}
+		} 
 	}
+	
+
 </script>
 
 
