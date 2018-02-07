@@ -266,7 +266,7 @@ $(document).ready(function(){
 						<div class="form-group">
 							<label class="control-label col-sm-2">Region :</label>
 							<div class="col-sm-5">
-								<form:select name="zone" id="zoneIds" class="form-control" multiple="multiple" path="">
+								<form:select name="zone" id="zoneIds" class="form-control" multiple="multiple" onchange="loadCategoryfilter();" path="">
 									<c:forEach items="${zoneList}" var="zone">
 										<option value="${zone.zoneId}"> ${zone.zoneName}</option>
 									</c:forEach>
