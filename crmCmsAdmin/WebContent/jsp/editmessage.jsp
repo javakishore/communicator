@@ -29,11 +29,6 @@ function loadCategoryfilter() {
 		  }
 		});
 	
-	//var xhttp = new XMLHttpRequest();
-	//xhttp.onreadystatechange = function() {
-	//if (xhttp.readyState == 4 && xhttp.status == 200) {
-	    
-	      //var serverdata = xhttp.responseText;
 	function doSomething(serverdata){	      
 		  var selectelement=document.getElementById("categoryId");
 		  var str_array = serverdata.split(':');
@@ -83,12 +78,6 @@ function loadCategoryfilter() {
 			 };
 		 	
 	    }
-	 // }
-	 // xhttp.open("GET", "./allcategoryfilter/"+id, true);
-	  //xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	 // xhttp.send("id="+id);
-	  
-
 	
  }
 	function validateForm() {
@@ -344,18 +333,17 @@ $(document).ready(function(){
 						<input type="hidden" name="selectedCHANNEL_IDs" id="selectedCHANNEL_IDs" class="form-control" value="${CHANNEL_IDs}"/>
 						<div class="form-group">
 							<label class="control-label col-sm-2">Region :</label>
+							
 							<div class="col-sm-5">
-								<form:select name="zone" id="zoneIds" class="form-control" multiple="multiple" path="">
-									<c:forEach items="${zoneList}" var="zone">
-										<option value="${zone.zoneId}"> ${zone.zoneName}</option>
-									</c:forEach>
+								<form:select name="zone" id="zoneIds" class="form-control" multiple="multiple" 
+								path="selZones" items="${zoneList}" itemValue="zoneId" itemLabel="zoneName">
 								</form:select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="control-label col-sm-2">Channel :</label>
 							<div class="col-sm-5">
-								<form:select path="" cssClass="form-control" id="channelId" name="channelId" onchange="loadCategoryfilter();">
+								<form:select path="channelName" cssClass="form-control" id="channelId" name="channelId" onchange="loadCategoryfilter();">
 								<option value="1">---Select---</option>
 									 <c:if test="${!empty channelList}">
 										<c:forEach items="${channelList}" var="channel">
@@ -369,7 +357,7 @@ $(document).ready(function(){
 							<div class="form-group">
 								<label class="control-label col-sm-2">Category :</label>
 								<div class="col-sm-5">
-									<form:select  path="category.categoryId" cssClass="form-control" id="categoryId" name="categoryId">
+									<form:select  path="categoryName" cssClass="form-control" id="categoryId" name="categoryId">
 										<c:if test="${!empty categoryList}">
 											<c:forEach items="${categoryList}" var="category">
 												<form:option value="${category.categoryId}">${category.categoryName}</form:option>

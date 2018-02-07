@@ -49,6 +49,7 @@ public class Message {
 	private String channelName;
 	@Column(name="REFERENCE_NO")
 	private String referenceNo;
+	private String[] selZones;
 	
 	public String getRegion() {
 		return region;
@@ -360,5 +361,11 @@ public class Message {
 	}
 	public void setReferenceNo(String referenceNo) {
 		this.referenceNo = referenceNo;
+	}
+	public String[] getSelZones() {
+		return selZones;
+	}
+	public void setSelZones(String[] selZones) {
+		this.selZones = selZones;
 	}
 }

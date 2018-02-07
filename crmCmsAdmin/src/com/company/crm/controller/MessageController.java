@@ -646,7 +646,7 @@ public class MessageController {
 		Message message = new Message();
 		try {
 			conn = DBConnection.getConnection();
-			//List<Category> categoryList = messageService.getCategoryList();
+
 			List<Category> categoryList = new ArrayList<Category>();
 			User user1 = (User) session.getAttribute("user");
 			String strUserName=user1.getUserName();
@@ -685,7 +685,7 @@ public class MessageController {
 			}
 
 			model.addAttribute("zoneList", zoneList);
-
+			
 			// get Channels
 			List<Channel> channelList = new ArrayList<Channel>();
 
@@ -716,24 +716,23 @@ public class MessageController {
 			String zoneIds = "";
 			String CHANNEL_IDs = "";
 
-			String sqlGetZoneIds = "select ZONE_ID from message_zone where MESSAGE_ID=" + id;
+			String sqlGetZoneIds = "select zone_id from message_zone where MESSAGE_ID=" + id;
 			Statement stmtGetZoneIds = conn.createStatement();
 			ResultSet resultSetGetZoneIds = stmtGetZoneIds.executeQuery(sqlGetZoneIds);
 			
-			ArrayList<String> zone = new ArrayList<String>();
+			//ArrayList<String> zone = new ArrayList<String>();
 			
 			while (resultSetGetZoneIds.next()) {
 
-				zoneIds += String
-						.valueOf(resultSetGetZoneIds.getInt("ZONE_ID")) + ",";
-				zone.add(resultSetGetZoneIds.getString("ZONE_ID"));
+				zoneIds = zoneIds  + resultSetGetZoneIds.getString("ZONE_ID") + ",";
+				//zone.add(resultSetGetZoneIds.getString("ZONE_ID"));
 			}
-			message.setZone(zone);
 			
 			if (!zoneIds.equals("")) {
 				zoneIds = zoneIds.substring(0, zoneIds.length() - 1);
 			}
-
+			message.setSelZones(zoneIds.split(","));
+			
 			String sqlGetCHANNEL_IDs = "select CHANNEL_ID from MESSAGE_CHANNEL where MESSAGE_ID="+ id;
 			Statement stmtGetCHANNEL_IDs = conn.createStatement();
 			ResultSet resultSetGetCHANNEL_IDs = stmtGetCHANNEL_IDs.executeQuery(sqlGetCHANNEL_IDs);
@@ -802,6 +801,8 @@ public class MessageController {
 			model.addAttribute("zoneIds", zoneIds);
 			model.addAttribute("CHANNEL_IDs", CHANNEL_IDs);
 			model.addAttribute("referenceNo",refNo);
+			message.setChannelName(CHANNEL_IDs);
+			message.setCategoryName(category_Id);
 			
 			String imgstr1 = "";
 			String imgstr = "";
