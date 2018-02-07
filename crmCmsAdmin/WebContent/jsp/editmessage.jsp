@@ -276,7 +276,7 @@ $(document).ready(function(){
 						<div class="form-group">
 							<label class="control-label col-sm-2">Channel :</label>
 							<div class="col-sm-5">
-								<form:select name="channel" id="channel" class="form-control" path="">
+								<form:select name="channel" id="channel" class="form-control" path="" onchange="loadCategoryfilter();">
 									<c:forEach items="${channelList}" var="channel">
 										<option value="${channel.channelId}"> ${channel.channelName}</option>
 									</c:forEach>
