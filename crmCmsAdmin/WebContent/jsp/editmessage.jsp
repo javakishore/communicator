@@ -357,7 +357,7 @@ $(document).ready(function(){
 							<div class="form-group">
 								<label class="control-label col-sm-2">Category :</label>
 								<div class="col-sm-5">
-									<form:select  path="categoryName" cssClass="form-control" id="categoryId" name="categoryId">
+									<form:select  path="categoryName" cssClass="form-control" id="categoryId" name="category.categoryId">
 										<c:if test="${!empty categoryList}">
 											<c:forEach items="${categoryList}" var="category">
 												<form:option value="${category.categoryId}">${category.categoryName}</form:option>
