@@ -1260,7 +1260,7 @@ public class MessageController {
 
 			if (f1 != null && f1.length() > 0)
 				sql1 = sql1 + " , MESSAGE_LINK= '" + f1 + "'";
-			if (request.getParameter("category.categoryId").equalsIgnoreCase("6")) {
+			if (message.getCategoryName().equalsIgnoreCase("6")) {
 
 				sql1 = sql1 + " , MESSAGE_IMG_LINK= '" + request.getParameter("videoURL1") + "'";
 
@@ -1282,7 +1282,7 @@ public class MessageController {
 					+ (request.getParameter("headlineName1").replaceAll("'", "''")) + "'";
 			if (f2 != null && f2.length() > 0)
 				sql11 = sql11 + " , MESSAGE_LINK= '" + f2 + "'";
-			if (request.getParameter("category.categoryId").equalsIgnoreCase("6")) {
+			if (message.getCategoryName().equalsIgnoreCase("6")) {
 
 				sql11 = sql11 + " , MESSAGE_IMG_LINK= '" + request.getParameter("videoURL2") + "'";
 
