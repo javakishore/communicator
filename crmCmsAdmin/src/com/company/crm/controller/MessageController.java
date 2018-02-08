@@ -1243,12 +1243,12 @@ public class MessageController {
 			model.addAttribute("msg", "write file" + request.getParameter("effdate"));
 			String sql = "UPDATE MESSAGE SET CREATED_AT= TO_DATE('" + request.getParameter("effdate")
 					+ "', 'DD-MM-YYYY:HH24:MI:SS'), EXPIRY_AT=TO_DATE('" + request.getParameter("expdate")
-					+ "', 'DD-MM-YYYY:HH24:MI:SS') , CATEGORY_ID= " + request.getParameter("category.categoryId")
-					+ ", CATEGORYID= " + request.getParameter("category.categoryId")
+					+ "', 'DD-MM-YYYY:HH24:MI:SS') , CATEGORY_ID= " + message.getCategoryName()
+					+ ", CATEGORYID= " + message.getCategoryName()
 					+ ",MSG_STATUS=0"
 					+ ",REFERENCE_NO = '"+request.getParameter("referenceNo")+"' "
 					+ "  WHERE MESSAGE_ID=" + request.getParameter("messageId");
-			
+			System.out.println("Update Message Query >> "+sql);
 			System.out.println("inside message editquery execute " +request.getParameter("messageId"));
 			
 			Statement stmt = conn.createStatement();
@@ -1874,10 +1874,6 @@ public class MessageController {
 	@RequestMapping(value = URIConstants.APPROVE_MESSAGES, method = RequestMethod.GET)
 	public String approveMessage(@PathVariable("id") int id, Model model,
 			HttpServletResponse response) {
-		// @RequestMapping(value="/approvemessages", method =
-		// RequestMethod.POST)
-		// public String approveMessage(HttpServletRequest request,
-		// @RequestParam("id") int id, Model model) {
 		String datefromdb = "";
 		String category_Id = "";
 		Connection conn = null;
@@ -1942,7 +1938,7 @@ public class MessageController {
 
 			// resultset.close();
 			// stmt.close();
-			if (date != null) {
+			if (date != null && !"".equals(date) && !"null".equalsIgnoreCase(date)) {
 				DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 				Date date2 = dateFormat.parse(date);
 				
@@ -1972,25 +1968,6 @@ public class MessageController {
 					cerDir.mkdirs();
 				}
 
-				// For develoement
-				// ApnsService service = APNS.newService()
-				// .withCert(base+File.separator+File.separator+cerFolder+"PruBSNNotificationCertificate.p12",
-				// "prubsn@123")
-				// .withProductionDestination().build();
-
-				// For production
-				/*
-				 * ApnsService service = APNS.newService()
-				 * .withCert(base+File.separator
-				 * +File.separator+cerFolder+"PruBSNNotificationCertificate.p12"
-				 * , "prubsn@123") .withProductionDestination().build();
-				 */
-
-				/*
-				 * String sql1 = "select DEVICE_TOKEN,USER_ID from Devices";
-				 * Statement stmt1 = conn.createStatement(); ResultSet resultSet
-				 * = stmt1.executeQuery(sql1);
-				 */
 
 				int userId = 0;
 
@@ -2033,27 +2010,6 @@ public class MessageController {
 						}
 
 					}
-					/*
-					 * String sqlGetDeviceForUser=
-					 * "select DEVICE_TOKEN from devices where USER_ID="+userId;
-					 * Statement stmtGetDevicesForUser=conn.createStatement();
-					 * ResultSet
-					 * resultSetDevicesForUser=stmtGetDevicesForUser.executeQuery
-					 * (sqlGetDeviceForUser);
-					 * while(resultSetDevicesForUser.next()) { String
-					 * deviceToken
-					 * =resultSetDevicesForUser.getString("DEVICE_TOKEN");
-					 * devices.add(new Devices(deviceToken,
-					 * String.valueOf(badgeCountToSend))); }
-					 * 
-					 * //UPDATE BADGE_COUNT SET BADGE_COUNT = '1' WHERE
-					 * USER_ID=2; badgeCount=badgeCount+1; String
-					 * sqlInsertBadgeCount
-					 * ="UPDATE BADGE_COUNT SET DEVICE_BADGE_COUNT = "
-					 * +badgeCount+" WHERE USER_ID="+userId; Statement
-					 * stmtBadgeCount=conn.createStatement();
-					 * stmtBadgeCount.executeUpdate(sqlInsertBadgeCount);
-					 */
 					// msgToSend=""+badgeCountToSend;
 					for (int i = 0; i < zoneIds.size(); i++) {
 						for (int j = 0; j < CHANNEL_IDs.size(); j++) {
@@ -2111,27 +2067,6 @@ public class MessageController {
 						}
 					}
 					
-					/*
-					 * String sqlGetDeviceForUser=
-					 * "select DEVICE_TOKEN from devices where USER_ID="+userId;
-					 * Statement stmtGetDevicesForUser=conn.createStatement();
-					 * ResultSet
-					 * resultSetDevicesForUser=stmtGetDevicesForUser.executeQuery
-					 * (sqlGetDeviceForUser);
-					 * while(resultSetDevicesForUser.next()) { String
-					 * deviceToken
-					 * =resultSetDevicesForUser.getString("DEVICE_TOKEN");
-					 * devices.add(new Devices(deviceToken,
-					 * String.valueOf(badgeCountToSend))); }
-					 * 
-					 * //UPDATE BADGE_COUNT SET BADGE_COUNT = '1' WHERE
-					 * USER_ID=2; badgeCount=badgeCount+1; String
-					 * sqlInsertBadgeCount
-					 * ="UPDATE BADGE_COUNT SET DEVICE_BADGE_COUNT = "
-					 * +badgeCount+" WHERE USER_ID="+userId; Statement
-					 * stmtBadgeCount=conn.createStatement();
-					 * stmtBadgeCount.executeUpdate(sqlInsertBadgeCount);
-					 */
 
 				}
 
@@ -2140,34 +2075,8 @@ public class MessageController {
 					Devices device = devices.get(i);
 					String token = device.getToken();
 					String badge = device.getBadgeCount();
-					// System.out.println("In Apple noti"+device.getToken());
-					/*
-					 * //String token =devices.get(i); String payload =
-					 * APNS.newPayload().alertBody(msgToSend+"===="+badge)
-					 * .build(); service.push(token, payload);
-					 */
-
-					// String payload =
-					// APNS.newPayload().badge(Integer.parseInt(badge))
-					// .customField("categoryId", category_Id)
-					// .customField("MessageId", id)
-					// .localizedKey(msgToSend)
-					// .actionKey("Play").build();
-
-					// int now = (int)(new Date().getTime()/1000);
-
-					// EnhancedApnsNotification notification = new
-					// EnhancedApnsNotification(EnhancedApnsNotification.INCREMENT_ID()
-					// /* Next ID */,
-					// now + 60 * 60 /* Expire in one hour */,
-					// token /* Device Token */,
-					// payload);
-
-					// service.push(notification);
 
 				}
-				// sendNotificationForAndroid(id,category_Id,model);
-				// } time if
 			}
 
 		} catch (ClassNotFoundException e) {
@@ -2190,10 +2099,7 @@ public class MessageController {
 			DBConnection.closeConnection(conn);
 		}
 
-
-		// return "pendingmessages";
 		return "msgapproved";
-		// return ""+datefromdb;
 	}
 
 	// Added By
