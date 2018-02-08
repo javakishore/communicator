@@ -1249,7 +1249,6 @@ public class MessageController {
 					+ ",REFERENCE_NO = '"+request.getParameter("referenceNo")+"' "
 					+ "  WHERE MESSAGE_ID=" + request.getParameter("messageId");
 			System.out.println("Update Message Query >> "+sql);
-			System.out.println("inside message editquery execute " +request.getParameter("messageId"));
 			
 			Statement stmt = conn.createStatement();
 			int queryresult = stmt.executeUpdate(sql);
@@ -1298,7 +1297,7 @@ public class MessageController {
 			stmt11.executeUpdate(sql11);
 
 			String zone[] = request.getParameterValues("zone");
-			String channel[] = request.getParameterValues("channel");
+			String channel[] = request.getParameterValues("channelName");
 
 			String sqlDeleteZone = "delete from MESSAGE_ZONE where MESSAGE_ID=?";
 			PreparedStatement stmtDeleteZone = conn.prepareStatement(sqlDeleteZone);
@@ -1877,7 +1876,7 @@ public class MessageController {
 		String datefromdb = "";
 		String category_Id = "";
 		Connection conn = null;
-		System.out.println("inside approve mesage ");
+		System.out.println("GET >> approveMessage Started.. ");
 		try {
 			conn = DBConnection.getConnection();
 
