@@ -1296,7 +1296,7 @@ public class MessageController {
 			Statement stmt11 = conn.createStatement();
 			stmt11.executeUpdate(sql11);
 
-			String zone[] = request.getParameterValues("zone");
+			String zone[] = request.getParameterValues("selZones");
 			String channel[] = request.getParameterValues("channelName");
 
 			String sqlDeleteZone = "delete from MESSAGE_ZONE where MESSAGE_ID=?";

@@ -335,7 +335,7 @@ $(document).ready(function(){
 							<label class="control-label col-sm-2">Region :</label>
 							
 							<div class="col-sm-5">
-								<form:select name="zone" id="zoneIds" class="form-control" multiple="multiple" 
+								<form:select id="zoneIds" class="form-control" multiple="multiple" 
 								path="selZones" items="${zoneList}" itemValue="zoneId" itemLabel="zoneName">
 								</form:select>
 							</div>
