@@ -1,0 +1,210 @@
+.clear { clear:both; margin:0; paddin:0; }
+.addProjectform { margin:0 auto; float:none!important; overflow:hidden; }
+.addProjectform h2 { text-align: center; }
+.SuccessMessage { margin:10px 0 0 377px!important; float:none!important; padding:3px 10px!important; }
+.ErrorMessageContent { padding:0!important; margin:0; }
+.ErrorMessage { margin:10px auto!important; float:none!important; padding:3px 10px!important; display: block; }
+.addedProjects { margin:0 auto!important; float:none!important; }
+.ProjectsTable {  min-height:0;max-height:375px; overflow-y:auto; overflow-x:auto;  }
+.textAlign {  text-align: center;}
+/******* CSS By Tushar *******/
+html, body.login{
+	height: 100%;
+}
+body.login{
+	background-color: #89cff0;
+	padding-top: 7%;
+}
+.clear_both {
+	height: 0;
+	font-size: 0px;
+	line-height: none;
+	clear: both;
+}
+.login-block{
+	background-color: rgba(244, 244, 244, 0.9);
+	background-image: url(../images/wall-pin.png);
+	background-repeat: no-repeat;
+	background-position: 50% 15px;
+	width: 300px;
+	border-radius: 5px;
+	margin: 5% auto 5% auto;
+	-webkit-box-shadow: 2px 3px 5px -1px rgba(0,0,0,0.25);
+	-moz-box-shadow: 2px 3px 5px -1px rgba(0,0,0,0.25);
+	box-shadow: 2px 3px 5px -1px rgba(0,0,0,0.25);
+	padding: 70px 0 0 0;
+	position: relative;
+	overflow: hidden;
+}
+.login-block .logo{
+	padding: 0 15px 20px 15px;	
+}
+.login-block .logo img{
+	width: 100%;	
+}
+.login-block .form-horizontal .form-group{
+	margin: 0;	
+}
+.login-block .form-group .form-item{
+	padding: 0 15px;	
+}
+.login-block .form-item input.form-control {
+  height: 30px;
+  padding: 2px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  font-size: 16px;
+  line-height: 20px;
+  color: #555;
+  -webkit-font-smoothing: antialiased;
+  outline: none;
+  width: 100%;
+}
+.login-block .form-item input#userName{
+	margin-bottom: 10px;
+}
+.login-block .lang-box{
+	padding: 15px 15px 10px 15px;	
+}
+.btn-box{
+	margin: 20px 0 50px 0;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+}
+.btn-box .btn-login{
+	background-color: #ff6764;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 7px 15px;
+	border-radius: 0;
+	outline: none;
+}
+.btn-box .btn-login:hover, .btn-box .btn-login:focus, .btn-box .btn-login:active, 
+.header-wrap .btn-logout:hover, .header-wrap .btn-logout:focus, .header-wrap .btn-logout:active, 
+.btn-block .btn-logout:hover, .btn-block .btn-logout:focus, .btn-block .btn-logout:active{
+	color: #fff;
+	outline: none;
+}
+.register-box{
+	padding: 15px 0;
+	text-align: center;	
+}
+
+.header{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: #ffffff;
+	position: relative;
+	-webkit-box-shadow: 0 6px 8px -6px rgba(0, 0, 0, 0.10);
+	-moz-box-shadow: 0 6px 8px -6px rgba(0, 0, 0, 0.10);
+	box-shadow: 0 6px 8px -6px rgba(0, 0, 0, 0.10);	
+}
+.header-wrap{
+	padding: 10px 15px;
+}
+.header-wrap h3.user-intro{
+	margin: 0;
+	font-size: 14px;
+	padding: 9px 15px 0 0;
+		
+}
+.header-wrap .btn-logout{
+	background-color: #ff6764;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 0;
+	outline: none;
+}
+.btn-block .btn-logout{
+	background-color: #ff6764;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 0;
+	outline: none;
+}
+.container-wrap .main-nav{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: block;
+	width: auto;
+	border: 1px solid #e6e6e6;
+}
+.container-wrap .main-nav li{
+	border-bottom: 1px solid #e6e6e6;	
+}
+.container-wrap .main-nav a{
+	padding: 10px 15px;
+	display: block;
+	font-size: 1.1em;
+	color: #2b3d4c;
+	text-decoration: none;
+	outline: none;
+}
+.container-wrap .main-nav a:hover, .container-wrap .main-nav a:focus, .container-wrap .main-nav a:active, 
+.container-wrap .main-nav a.active{
+	color: #ff6764;
+	outline: none;
+}
+.title-bar{
+	background-color:#DD0222;
+	box-shadow: inset 0 6px 8px -6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    position: relative;
+}
+.title-bar h2 {
+    color: #7D8C99;
+    font-size: 1.10em;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+}
+.title-bar .tools-box{
+	position: absolute;
+	top: 9px;
+	left: 15px;
+}
+.tool-list{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.tool-list li a{
+	color: #7d8c99;
+	font-weight: 600;
+	text-decoration: none;
+	outline: none;
+}
+table.table{
+	margin: 0 auto;	
+}
+.filter-block {
+	margin-bottom: 10px;
+}
+.filter-block .col-left{
+	padding-top: 5px;
+}
+.filter-block .btn-block{
+	width: auto !important;
+}
+.filter-block .btn-block .btn-logout{
+	padding: 2px 12px;
+	font-size: 13px;
+}
+#login .alert-danger.ErrorMessage{
+	width: 240px !important;	
+}
+.form-horizontal .col-sm-offset-2.col-sm-10.btn-block{
+	width: auto !important;	
+}
+/******* CSS By Tushar *******/

@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//src/com/prubsn/bean/LoginBean.java=UTF-8
+encoding//src/com/prubsn/bean/LoginBeanService.java=UTF-8
+encoding//src/com/prubsn/bean/LoginBeanServiceLocator.java=UTF-8
+encoding//src/com/prubsn/bean/LoginBeanSoapBindingStub.java=UTF-8
+encoding//src/com/prubsn/dto/RequestDTO.java=UTF-8
+encoding//src/com/prubsn/dto/ResponseDTO.java=UTF-8
