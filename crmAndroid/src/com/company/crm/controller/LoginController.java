@@ -30,13 +30,16 @@ import com.company.crm.util.DBConnection;
 @RequestMapping("/")
 public class LoginController {
 
-	public int testuserid=0;
+	//public int testuserid=0;
 	public int CHANNEL_ID=0;
 	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(LoginController.class);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6261a6155e7a2bc31778d43617d07acffb57167f
 	@RequestMapping(method = RequestMethod.GET)
 	public String login(Model model) {
 		model.addAttribute("login", new Login());
@@ -112,30 +115,24 @@ public class LoginController {
 	}
 
 
-	public void updateUserid(String username) throws ClassNotFoundException, SQLException{
+	public int updateUserid(String username) throws ClassNotFoundException, SQLException{
 		
-		//String sqlGetCHANNEL_ID = null;
         String sql = "";
-       // ArrayList<Integer> CHANNEL_IDs = new ArrayList<Integer>();
-        System.out.println("Call Update");
         Connection conn = null;
         try{
             conn = DBConnection.getConnection();
-           // System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=in Select Userid");
             sql = "select * from user_m where USERNAME='" + username + "'";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet resultSet = stmt.executeQuery(sql);
-           
-            
             while (resultSet.next()) {
-            	testuserid = resultSet.getInt("USERID");
-                System.out.println("######################################################## select testuserid:"+testuserid);
+            	return resultSet.getInt("USERID");
             }
         }catch(Exception e){
         	e.printStackTrace();
         }finally{
 			DBConnection.closeConnection(conn);
 		}
+        return 0;
 	}
 	
 	public void updateCHANNEL_ID(){
@@ -162,10 +159,10 @@ public class LoginController {
 	        System.out.println("######################################################## Zone:"+zone);
 	        System.out.println("######################################################## leaderFlag:"+leaderFlag);
 	        System.out.println("######################################################## channelCode:"+channelCode);
-	        int finalresult=0;
-	        block13 : {
+	        //int finalresult=0;
+	        try {
 	            result = 0;
-	            String strResult = "";
+	           // String strResult = "";
 	            int zoneId = 0;
 	            String sqlGetCHANNEL_ID = null;
 	            String sql = "";
@@ -179,13 +176,6 @@ public class LoginController {
 	                sql = "select * from user_m where USERNAME='" + username + "'";
 	                PreparedStatement stmt = conn.prepareStatement(sql);
 	                ResultSet resultSet = stmt.executeQuery(sql);
-	                /*if (channel.equalsIgnoreCase("DA")) {
-	                    channel = "PBTB";
-	                }
-	                else  if (channel.equalsIgnoreCase("PAMB")) {
-	                    channel = "PAMB";
-	                }
-	        */
 	                
 	                while (resultSet.next()) {
 	                    result = resultSet.getInt("USERID");
@@ -206,7 +196,7 @@ public class LoginController {
 		                stmtRegisterUser.setString(1, username);
 		                stmtRegisterUser.executeUpdate();
 	
-		                updateUserid(username);
+		                int testuserid = updateUserid(username);
 		                
 		                String sqlGetZoneId = "Select ZONE_ID from Zone where upper(ZONE_NAME)=upper('" + zone + "')";
 		                Statement stmtGetZoneId = conn.createStatement();
@@ -244,14 +234,6 @@ public class LoginController {
 		                    
 		                } else {
 		                	
-		                	/*sqlGetCHANNEL_ID = "Select CHANNELID from CHANNEL where upper(CHANNELNAME)=upper('" + channel + " leaders" + "')";
-		                    stmtGetCHANNEL_ID = conn.createStatement();
-		                    resultSetGetCHANNEL_ID = stmtGetCHANNEL_ID.executeQuery(sqlGetCHANNEL_ID);
-		                    
-		                    while (resultSetGetCHANNEL_ID.next()) {
-		                        CHANNEL_IDs.add(resultSetGetCHANNEL_ID.getInt("CHANNELID"));
-		                    }*/
-		                    
 		                    sqlGetCHANNEL_ID = "Select CHANNELID from CHANNEL where upper(CHANNELNAME)=upper('" + channel + " agents" + "')";
 		                    Statement stmtGetCHANNEL_ID2 = conn.createStatement();
 		                    ResultSet resultSetGetCHANNEL_IDAgent = stmtGetCHANNEL_ID2.executeQuery(sqlGetCHANNEL_ID);
@@ -283,6 +265,8 @@ public class LoginController {
 	            }finally{
 	    			DBConnection.closeConnection(conn);
 	    		}
+	        }finally {
+	        	
 	        }
 	        return "{\"result\":" + result + "}";
 	    }

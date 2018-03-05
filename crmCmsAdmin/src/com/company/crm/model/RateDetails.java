@@ -8,10 +8,10 @@ public class RateDetails {
 	private int  ratingValue;
 	
 	public RateDetails() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	public RateDetails(int username, String rateText,int rateValue) {
-		// TODO Auto-generated constructor stub
+		
 		this.userid=userid;
 		this.ratingtext=ratingtext;
 		this.ratingValue=ratingValue;

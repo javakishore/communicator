@@ -2,7 +2,6 @@ package com.company.crm.controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,13 +24,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.company.crm.constant.URIConstants;
 import com.company.crm.model.Channel;
-import com.company.crm.model.ConstantDb;
 import com.company.crm.model.User;
 import com.company.crm.util.DBConnection;
 
 @Controller
 public class ChannelController {
-	private static final Logger LOGGER = LoggerFactory.getLogger((Class) ChannelController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger( ChannelController.class);
 
 	
 	
@@ -40,23 +38,22 @@ public class ChannelController {
 		LOGGER.debug("Start channelList.");
 		List<Channel> channelList = new ArrayList<Channel>();
 
-		@SuppressWarnings("unchecked")
 		List<String> array = new ArrayList<String>();
 		array.add("array1");
 		Connection conn = null;
 		try {
 			
-			System.out.println("inside my channel");
 			conn = DBConnection.getConnection();
 			User user1 = (User) session.getAttribute("user");
 			 String strUserName=user1.getUserName();
 			 String sql="";
 			 if(strUserName.equalsIgnoreCase("admin") || strUserName.equalsIgnoreCase("banca")){
-			 sql=" select a.channelid,a.channelname,a.isapproved from channel a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.channelid desc";
+				 sql=" select a.channelid,a.channelname,a.isapproved from channel a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.channelid desc";
 			 }
 			 else{
 				 sql=" select a.channelid,a.channelname,a.isapproved from channel a where nvl(a.isapproved,0) = 1  order by a.channelid desc";
 			 }
+			 System.out.println("GET >> myChannel >> SQL >> "+sql);
 			Statement stmt = conn.createStatement();
 			ResultSet resultSet = stmt.executeQuery(sql);
 
@@ -68,8 +65,6 @@ public class ChannelController {
 				channelList.add(new Channel(channelid, channelname, isapproved));
 	
 			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
