@@ -1,7 +1,6 @@
   package com.company.crm.controller;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,6 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,10 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.company.crm.model.ConstantDb;
 import com.company.crm.model.Login;
 import com.company.crm.model.User;
-import com.company.crm.service.LoginService;
 import com.company.crm.util.DBConnection;
 
 @Component
@@ -40,8 +36,6 @@ public class LoginController {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(LoginController.class);
 
-	@Autowired
-	private LoginService loginService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String login(Model model) {
