@@ -16,17 +16,18 @@
 		</javac>
 	</target>
 	<target name="copy">
-		<copy todir="WEB-INF/classes/resources">
-			<fileset dir="src/resources" />
+		<copy todir="classes/resources">
+			<fileset dir="src/resources"/>				
 		</copy>
 	</target>
-	<target name="war" depends="compile">
+	<target name="war" depends="compile,copy">
 		<war destfile="crmAndroid.war" webxml="WebContent/WEB-INF/web.xml">
 			<fileset dir="WebContent" />
-			<classes dir="build/classes" />
+			<classes dir="build/classes"/>
 			<zipfileset dir="src/resources" prefix="WEB-INF/classes/resources" />
 			<zipfileset dir="src" prefix="WEB-INF/classes/">
-				<include name="jdbc.properties"/>
+				<include name="*.properties"/>
+				<include name="*.xml"/>
 			</zipfileset>
 		</war>
 	</target>
