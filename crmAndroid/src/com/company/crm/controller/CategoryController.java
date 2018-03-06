@@ -1,35 +1,22 @@
 package com.company.crm.controller;
 
-import com.company.crm.model.Category;
-import com.company.crm.model.ConstantDb;
-import com.company.crm.model.User;
-import com.company.crm.service.CategoryService;
-import com.company.crm.util.DBConnection;
-import com.company.crm.util.Page;
-import com.itextpdf.text.pdf.codec.Base64;
-
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.cryptonode.jncryptor.AES256JNCryptor;
-import org.cryptonode.jncryptor.CryptorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,12 +31,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.util.UriTemplate;
-import org.springframework.http.MediaType;
 
-import sun.misc.BASE64Decoder;
+import com.company.crm.model.Category;
+import com.company.crm.service.CategoryService;
+import com.company.crm.util.DBConnection;
+import com.company.crm.util.Page;
+
 import sun.misc.BASE64Encoder;
 
 @Controller
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class CategoryController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger((Class)CategoryController.class);
@@ -81,7 +72,7 @@ public class CategoryController {
 
     @RequestMapping(value={"/jqgrid/addcategory"}, method={RequestMethod.POST}, produces={"application/json"}, consumes={"application/json"})
     public ResponseEntity<String> addCategory(HttpServletRequest request, @RequestBody Category category) {
-        User user = (User)request.getSession().getAttribute("user");
+       // User user = (User)request.getSession().getAttribute("user");
         this.categoryService.addCategory(category);
         URI uri = new UriTemplate("{requestUrl}/{id}").expand(new Object[]{request.getRequestURL().toString(), 2004});
         HttpHeaders headers = new HttpHeaders();
@@ -92,7 +83,7 @@ public class CategoryController {
     @RequestMapping(value={"/addcategory"}, method={RequestMethod.POST})
     public String addCategory(@Valid @ModelAttribute Category category, BindingResult result, Model model, HttpServletRequest request) {
         if (!result.hasErrors()) {
-            User user = (User)request.getSession().getAttribute("user");
+           // User user = (User)request.getSession().getAttribute("user");
             this.categoryService.addCategory(category);
             List categoryList = this.categoryService.getCategoryList();
             model.addAttribute("category", (Object)new Category());
@@ -131,9 +122,9 @@ public class CategoryController {
         try {
         	conn =  DBConnection.getConnection();
             String sql = "select * from category";           
-            AES256JNCryptor cryptor = new AES256JNCryptor();
+           // AES256JNCryptor cryptor = new AES256JNCryptor();
             BASE64Encoder base64encoder = new BASE64Encoder();
-            String password = "aes123";
+            //String password = "aes123";
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql);
 //            Sudd Base Encoder
@@ -219,11 +210,12 @@ public class CategoryController {
         return categoryList;
     }
 
-    @SuppressWarnings("unchecked")
+    
 	@RequestMapping(value={"/restcategoryslistAndro/{userId}/{lang}"}, method={RequestMethod.GET}, produces={"application/json"})
     @ResponseBody
     public List<Category> getAllCategoryAndro(@PathVariable(value="userId") int userId, @PathVariable(value="lang") int lang) {
     	 LOGGER.debug("Start categoryList.");
+    	 System.out.println("GET >> getAllCategoryAndro Started.");
          List categoryListEnc = new ArrayList();
          int noOfMsgPerCat = 0;
          String noOfMsgPerCatenc = "0";
@@ -232,11 +224,8 @@ public class CategoryController {
          try
          {
            conn = DBConnection.getConnection();
-           //  String sql = "select * from category";
              String sql = "select * from category where category_image is not null";
-//             JNCryptor cryptor = new AES256JNCryptor();
              BASE64Encoder cryptor= new BASE64Encoder();
-             String password = "aes123";
              Statement stmt = conn.createStatement();
              ResultSet resultSet = stmt.executeQuery(sql);
              if(lang == 1)
@@ -255,12 +244,16 @@ public class CategoryController {
                  else
                      categoryName = new String(cryptor.encode(String.valueOf(resultSet.getString("CATEGORY_NAME_BHASA")).getBytes()));
                  enc1 = new String(cryptor.encode(String.valueOf(categoryId).getBytes()));
+                 
                  String sqlPostPerCat = (new StringBuilder()).append("select count (DISTINCT md.MESSAGE_ID) from message_details md, MESSAGE_ZONE mz, MESSAGE_CHANNEL mc," +
                  		" MESSAGE m,category c where  c.CATEGORYID=").append(categoryId).append(" and m.MESSAGE_ID = md.MESSAGE_ID").append(" and md.message_id " +
                  		" IN(select message_id from message where created_at<SYSDATE and EXPIRY_AT>=SYSDATE and category_id=").append(categoryId).append("  " +
                  		" and MSG_STATUS=1 and IS_DELETED=0)").append(" and md.MESSAGE_ID=mz.MESSAGE_ID and mz.ZONE_ID IN (Select USER_ZONE.ZONE_ID from USER_ZONE " +
                  		" where USER_ZONE.USER_ID=").append(userId).append(")").append(" and md.MESSAGE_ID=mc.MESSAGE_ID and mc.CHANNEL_ID IN " +
                  		" (Select USER_CHANNEL.CHANNEL_ID from USER_CHANNEL where USER_CHANNEL.USER_ID=").append(userId).append(")").append(" and md.MESSAGE_LANG=1").toString();
+                 
+                 System.out.println("GET >> getAllCategoryAndro >> sqlPostPerCat : "+sqlPostPerCat);
+                 
                  Statement stmtPostPerCat = conn.createStatement();
                  ResultSet resultSetPostPerCat = stmtPostPerCat.executeQuery(sqlPostPerCat);
                  if(resultSetPostPerCat != null && resultSetPostPerCat.next())
@@ -288,8 +281,7 @@ public class CategoryController {
                          }
                      } while(resultSetPostPerCat.next());
                      int readMsg = 0;
-                     String sqlGetreadMsg = (new StringBuilder()).append("select count(unique rr.MESSAGE_ID) from read_reciept rr, message m " +
-                     		" where rr.USER_ID=").append(userId).append(" and rr.MESSAGE_ID=m.MESSAGE_ID and m.CATEGORY_ID=").append(categoryId).toString();
+                     String sqlGetreadMsg = (new StringBuilder()).append("select count(unique rr.MESSAGE_ID) from read_reciept rr, message m  where rr.USER_ID="+userId+" and rr.MESSAGE_ID=m.MESSAGE_ID and m.CATEGORY_ID="+categoryId).toString();
                      
                      Statement stmtGetreadMsg = conn.createStatement();
                      for(ResultSet resultSetGetReadMsg = stmtGetreadMsg.executeQuery(sqlGetreadMsg); resultSetGetReadMsg.next();)
