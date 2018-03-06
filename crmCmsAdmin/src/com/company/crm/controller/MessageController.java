@@ -651,10 +651,11 @@ public class MessageController {
 			User user1 = (User) session.getAttribute("user");
 			String strUserName=user1.getUserName();
 			String sql1="";
-			 if(strUserName.equalsIgnoreCase("admin") || strUserName.equalsIgnoreCase("banca")){
+			 if(strUserName.equalsIgnoreCase("admin") ) {
+				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and and a.username='"+strUserName+"' order by a.categoryid desc";
+			 }else if( strUserName.equalsIgnoreCase("banca")){
 				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.categoryid desc";
-			 }
-			 else{
+			 }else{
 				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 order by a.categoryid desc";
 			 }
 			
@@ -676,12 +677,14 @@ public class MessageController {
 			List<Zone> zoneList = new ArrayList<Zone>();
 
 			String sql = "select * from zone";
+			if(strUserName.equalsIgnoreCase("admin") ) {
+				sql = "select * from zone and zonename not in ('BANCATAKAFUL-DA','BANCATAKAFUL-PAMB','BANCATAKAFUL-TFE')";
+			 }
 
 			Statement stmtZone = conn.createStatement();
 			ResultSet resultSetZone = stmtZone.executeQuery(sql);
 			while (resultSetZone.next()) {
-				zoneList.add(new Zone(resultSetZone.getInt("ZONE_ID"),
-				resultSetZone.getString("ZONE_NAME")));
+				zoneList.add(new Zone(resultSetZone.getInt("ZONE_ID"), resultSetZone.getString("ZONE_NAME")));
 			}
 
 			model.addAttribute("zoneList", zoneList);

@@ -67,7 +67,7 @@ public class Category {
 	}
 	
 	public Category() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public Category(String strCategoryId, String categoryName, String noOfMsgPerCat,String categoryImage,String noOfUnreadMsg,int categoryId){

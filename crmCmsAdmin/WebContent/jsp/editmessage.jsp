@@ -340,7 +340,7 @@ $(document).ready(function(){
 							
 							<div class="col-sm-5">
 								<form:select id="zoneIds" class="form-control" multiple="multiple" 
-								path="selZones" items="${zoneList}" itemValue="zoneId" itemLabel="zoneName">
+											 path="selZones" items="${zoneList}" itemValue="zoneId" itemLabel="zoneName">
 								</form:select>
 							</div>
 						</div>

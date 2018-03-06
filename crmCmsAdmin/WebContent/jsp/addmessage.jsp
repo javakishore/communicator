@@ -503,10 +503,10 @@ $(document).ready(function(){
 							<label class="control-label col-sm-2"></label>
 							<div class="col-sm-5">
 							<select  class="form-control" name="region1" id="region1" onchange="loadDoc()">
-  <option id=""  selected>Open this select menu</option>
-  <option value="PAMB">All PAMB</option>
-  <option value="PBTB">All PBTB</option>
-</select>
+							  <option id=""  selected>Open this select menu</option>
+							  <option value="PAMB">All PAMB</option>
+							  <option value="PBTB">All PBTB</option>
+							</select>
 
 
 </div>

@@ -6,11 +6,11 @@ public class Devices {
 	public String badgeCount;
 
 	public Devices() {
-		// TODO Auto-generated constructor stub
+		
 		
 	}
 	public Devices(String token,String badgeCount) {
-		// TODO Auto-generated constructor stub
+		
 		this.token=token;
 		this.badgeCount=badgeCount;
 	}

@@ -42,7 +42,7 @@ public class LoginUser {
 	}
 
 	public LoginUser() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	
@@ -61,7 +61,7 @@ public class LoginUser {
 		this.status=status;
 		this.logindate=logindate;
 		this.location=location;
-		// TODO Auto-generated constructor stub
+		
 	}
 
 }

@@ -33,8 +33,7 @@ public class LoginController {
 	//public int testuserid=0;
 	public int CHANNEL_ID=0;
 	
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(LoginController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String login(Model model) {

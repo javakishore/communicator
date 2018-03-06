@@ -17,10 +17,10 @@ public class Zone {
 	public String zoneName;
 	
 	public Zone() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	public Zone(Integer zoneId,String zoneName) {
-		// TODO Auto-generated constructor stub
+		
 		this.zoneId=zoneId;
 		this.zoneName=zoneName;
 	}
