@@ -10,7 +10,6 @@
 <link type="text/css" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css" rel="stylesheet" />
 <link type="text/css" href="<%=request.getContextPath()%>/resources/css/bootstrap-datetimepicker.css" rel="stylesheet" />
 <link type="text/css" href="<%=request.getContextPath()%>/resources/css/main.css" rel="stylesheet" />
-
 <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/bootstrap.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/bootstrap-datetimepicker.js"></script>
@@ -81,6 +80,11 @@ function loadCategoryfilter() {
 	
  }
 	function validateForm() {
+		if(document.addmessage.channelId.value == 1){
+			alert('Please select the channel ');
+			document.addmessage.channelId.focus();
+			return false;
+		}
 		if (document.addmessage.headlineName.value == "") {
 			alert("Please enter Headline for English");
 			document.addmessage.headlineName.focus();

@@ -232,6 +232,13 @@ function loadDoc() {
 	}
 
 	function validateForm() {
+		
+		if(document.addmessage.channelId.value == 1){
+			alert('Please select the channel ');
+			document.addmessage.channelId.focus();
+			return false;
+		}
+		
 		if (document.addmessage.headlineName.value == "") {
 			alert("Please enter Headline for English");
 			document.addmessage.headlineName.focus();
