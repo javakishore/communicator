@@ -720,6 +720,9 @@ public class MessageController {
 			String CHANNEL_IDs = "";
 
 			String sqlGetZoneIds = "select zone_id from message_zone where MESSAGE_ID=" + id;
+			if (strUserName.equalsIgnoreCase("admin")) {
+		        sqlGetZoneIds = "select mz.zone_id from message_zone mz,zone z where mz.zone_id= z.zone_id and MESSAGE_ID= " + id + " and z.zone_name not in  ('BANCATAKAFUL-DA','BANCATAKAFUL-PAMB','BANCATAKAFUL-TFE')";
+		     }
 			Statement stmtGetZoneIds = conn.createStatement();
 			ResultSet resultSetGetZoneIds = stmtGetZoneIds.executeQuery(sqlGetZoneIds);
 			
