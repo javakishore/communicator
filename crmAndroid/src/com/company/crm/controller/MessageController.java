@@ -3403,6 +3403,7 @@ public class MessageController {
 						.append(userId).append(")")
 						.append(" and MESSAGE_LANG=").append(lang)
 						.append("  ORDER BY m.CREATED_AT desc ").toString();
+			System.out.println("GET >> getAllMessagesAndro >> SQL :"+sql);
 			Statement stmt = conn.createStatement();
 			// JNCryptor cryptor;
 			BASE64Encoder cryptor;
