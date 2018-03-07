@@ -30,7 +30,7 @@ import com.company.crm.util.DBConnection;
 @RequestMapping("/")
 public class LoginController {
 
-	//public int testuserid=0;
+	public int testuserid=0;
 	public int CHANNEL_ID=0;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
@@ -110,24 +110,30 @@ public class LoginController {
 	}
 
 
-	public int updateUserid(String username) throws ClassNotFoundException, SQLException{
+	public void updateUserid(String username) throws ClassNotFoundException, SQLException{
 		
+		//String sqlGetCHANNEL_ID = null;
         String sql = "";
+       // ArrayList<Integer> CHANNEL_IDs = new ArrayList<Integer>();
+        System.out.println("Call Update");
         Connection conn = null;
         try{
             conn = DBConnection.getConnection();
+           // System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=in Select Userid");
             sql = "select * from user_m where USERNAME='" + username + "'";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet resultSet = stmt.executeQuery(sql);
+           
+            
             while (resultSet.next()) {
-            	return resultSet.getInt("USERID");
+            	testuserid = resultSet.getInt("USERID");
+                System.out.println("######################################################## select testuserid:"+testuserid);
             }
         }catch(Exception e){
         	e.printStackTrace();
         }finally{
 			DBConnection.closeConnection(conn);
 		}
-        return 0;
 	}
 	
 	public void updateCHANNEL_ID(){
@@ -182,7 +188,7 @@ public class LoginController {
 	                ResultSet resultSetCount = stmtCount.executeQuery(sql);
 	                int count = 0;
 	                while (resultSetCount.next()) {
-	                count = resultSetCount.getInt("count");
+	                	count = resultSetCount.getInt("count");
 	                }
 	                
 	                if (count == 0){
@@ -191,7 +197,7 @@ public class LoginController {
 		                stmtRegisterUser.setString(1, username);
 		                stmtRegisterUser.executeUpdate();
 	
-		                int testuserid = updateUserid(username);
+		                updateUserid(username);
 		                
 		                String sqlGetZoneId = "Select ZONE_ID from Zone where upper(ZONE_NAME)=upper('" + zone + "')";
 		                Statement stmtGetZoneId = conn.createStatement();
