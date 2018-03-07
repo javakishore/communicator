@@ -224,7 +224,7 @@ public class CategoryController {
          try
          {
            conn = DBConnection.getConnection();
-             String sql = "select * from category where category_image is not null";
+             String sql = "select * from category where category_image is not null and nvl(action,0) <> 2";
              BASE64Encoder cryptor= new BASE64Encoder();
              Statement stmt = conn.createStatement();
              ResultSet resultSet = stmt.executeQuery(sql);
