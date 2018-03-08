@@ -85,7 +85,7 @@ function loadCategoryfilter() {
 			document.addmessage.channelId.focus();
 			return false;
 		}
-		if(document.addmessage.categoryId.value == 1 || document.addmessage.categoryId.value == '' || document.addmessage.categoryId.value == null){
+		if( document.addmessage.categoryId.value == '' || document.addmessage.categoryId.value == null){
 			alert('Please select the category ');
 			document.addmessage.categoryId.focus();
 			return false;
