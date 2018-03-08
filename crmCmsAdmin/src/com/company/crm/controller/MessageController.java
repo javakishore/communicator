@@ -678,7 +678,7 @@ public class MessageController {
 
 			String sql = "select * from zone";
 			if(strUserName.equalsIgnoreCase("admin") ) {
-				sql = "select * from zone and zonename not in ('BANCATAKAFUL-DA','BANCATAKAFUL-PAMB','BANCATAKAFUL-TFE')";
+				sql = "select * from zone where zone_name not in ('BANCATAKAFUL-DA','BANCATAKAFUL-PAMB','BANCATAKAFUL-TFE')";
 			 }
 
 			Statement stmtZone = conn.createStatement();
