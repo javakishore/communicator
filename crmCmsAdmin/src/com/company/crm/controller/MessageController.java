@@ -652,7 +652,7 @@ public class MessageController {
 			String strUserName=user1.getUserName();
 			String sql1="";
 			 if(strUserName.equalsIgnoreCase("admin") ) {
-				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and and a.username='"+strUserName+"' order by a.categoryid desc";
+				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.categoryid desc";
 			 }else if( strUserName.equalsIgnoreCase("banca")){
 				 sql1=" select a.categoryid,a.categoryname,a.isapproved from category a where nvl(a.isapproved,0) = 1 and a.username='"+strUserName+"' order by a.categoryid desc";
 			 }else{
