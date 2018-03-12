@@ -253,6 +253,7 @@ public class CategoryController {
                  		" (Select USER_CHANNEL.CHANNEL_ID from USER_CHANNEL where USER_CHANNEL.USER_ID=").append(userId).append(")").append(" and md.MESSAGE_LANG=1").toString();
                  
                  System.out.println("GET >> getAllCategoryAndro >> sqlPostPerCat : "+sqlPostPerCat);
+                 LOGGER.debug("GET >> getAllCategoryAndro >> sqlPostPerCat : "+sqlPostPerCat);
                  
                  Statement stmtPostPerCat = conn.createStatement();
                  ResultSet resultSetPostPerCat = stmtPostPerCat.executeQuery(sqlPostPerCat);
