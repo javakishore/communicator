@@ -224,10 +224,11 @@ public class CategoryController {
          try
          {
            conn = DBConnection.getConnection();
-             String sql = "select * from category where category_image is not null and isapproved=1";
+             String sql = "select * from category where category_image is not null and isapproved=1 and categoryid in (select mc.categoryid from map_channel_category mc,user_channel uc where mc.channelid = uc.channel_id and uc.user_id="+userId+")";
              BASE64Encoder cryptor= new BASE64Encoder();
              Statement stmt = conn.createStatement();
              ResultSet resultSet = stmt.executeQuery(sql);
+             LOGGER.debug("getAllCategoryAndro >> "+sql);
              if(lang == 1)
                  categoryListEnc.add(new Category(new String(cryptor.encode("0".getBytes())), new String(cryptor.encode("All Communications".getBytes())), "", new String(cryptor.encode("img_allCommunication_1457531396936.png".getBytes())), new String(cryptor.encode("0".getBytes())), 0));
              else
@@ -257,7 +258,7 @@ public class CategoryController {
                  
                  Statement stmtPostPerCat = conn.createStatement();
                  ResultSet resultSetPostPerCat = stmtPostPerCat.executeQuery(sqlPostPerCat);
-                 if(resultSetPostPerCat != null && resultSetPostPerCat.next() && resultSetPostPerCat.getInt(1) > 0)
+                 if(resultSetPostPerCat != null && resultSetPostPerCat.next() )
                  {
                      do
                      {
