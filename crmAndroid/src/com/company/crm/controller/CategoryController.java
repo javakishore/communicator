@@ -257,7 +257,7 @@ public class CategoryController {
                  
                  Statement stmtPostPerCat = conn.createStatement();
                  ResultSet resultSetPostPerCat = stmtPostPerCat.executeQuery(sqlPostPerCat);
-                 if(resultSetPostPerCat != null && resultSetPostPerCat.next())
+                 if(resultSetPostPerCat != null && resultSetPostPerCat.next() && resultSetPostPerCat.getInt(1) > 0)
                  {
                      do
                      {
