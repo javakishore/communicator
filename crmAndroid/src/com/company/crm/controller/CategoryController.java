@@ -235,7 +235,7 @@ public class CategoryController {
              int noOfUnreadMsg;
              String categoryName;
              String enc1;
-             for(; resultSet.next(); categoryListEnc.add(new Category(enc1, categoryName, noOfMsgPerCatenc, new String(cryptor.encode(imgForCat.getBytes())), new String(cryptor.encode(String.valueOf(noOfUnreadMsg).getBytes())), noOfUnreadMsg)))
+             while(resultSet.next())
              {
                  noOfUnreadMsg = 0;
                  int categoryId = resultSet.getInt("CATEGORYID");
@@ -290,8 +290,12 @@ public class CategoryController {
 
                      if(noOfMsgPerCat > readMsg && noOfMsgPerCat != 0)
                          noOfUnreadMsg = noOfMsgPerCat - readMsg;
+                     
+                     
+                     categoryListEnc.add(new Category(enc1, categoryName, noOfMsgPerCatenc, new String(cryptor.encode(imgForCat.getBytes())), new String(cryptor.encode(String.valueOf(noOfUnreadMsg).getBytes())), noOfUnreadMsg));
+                     
                  }
-                 (new Category()).setCategoryId(Integer.valueOf(noOfUnreadMsg));
+                 //(new Category()).setCategoryId(Integer.valueOf(noOfUnreadMsg));
              }
 
          }
