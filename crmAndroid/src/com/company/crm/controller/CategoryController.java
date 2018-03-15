@@ -224,11 +224,14 @@ public class CategoryController {
          try
          {
            conn = DBConnection.getConnection();
-             String sql = "select * from category where category_image is not null and isapproved=1 and categoryid in (select mc.categoryid from map_channel_category mc,user_channel uc where mc.channelid = uc.channel_id and uc.user_id="+userId+")";
+             String sql = "select distinct ct.* from category ct where category_image is not null and isapproved=1 and categoryid in (select mc.categoryid from map_channel_category mc,user_channel uc where mc.channelid = uc.channel_id and uc.user_id="+userId+")";
+             
+             LOGGER.debug("getAllCategoryAndro >> "+sql);
+             
              BASE64Encoder cryptor= new BASE64Encoder();
              Statement stmt = conn.createStatement();
              ResultSet resultSet = stmt.executeQuery(sql);
-             LOGGER.debug("getAllCategoryAndro >> "+sql);
+             
              if(lang == 1)
                  categoryListEnc.add(new Category(new String(cryptor.encode("0".getBytes())), new String(cryptor.encode("All Communications".getBytes())), "", new String(cryptor.encode("img_allCommunication_1457531396936.png".getBytes())), new String(cryptor.encode("0".getBytes())), 0));
              else
