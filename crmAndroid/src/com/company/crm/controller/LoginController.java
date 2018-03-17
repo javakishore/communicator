@@ -216,6 +216,8 @@ public class LoginController {
 	                	count = resultSetCount.getInt("count");
 	                }
 	                testuserid = getUserid(username);
+	                if("DA".equals(channel))
+                		channel = "PBTB";
 	                if (count == 0){
 		                String sqlRegisterUser = "INSERT INTO USER_M (USERID, USERNAME, USERTYPE, LANG) VALUES (USER_M_SEQ.nextval, ?, 'user', '1')";
 		                PreparedStatement stmtRegisterUser = conn.prepareStatement(sqlRegisterUser);
@@ -281,8 +283,7 @@ public class LoginController {
 		                }
 	                
 	                }else {
-	                	if("DA".equals(channel))
-	                		channel = "PBTB";
+	                	
 	                	if (leaderFlag.equalsIgnoreCase("true")) {
 		                    sqlGetCHANNEL_ID = "Select CHANNELID from CHANNEL where upper(CHANNELNAME)=upper('" + channel + " leaders" + "')";
 		                    stmtGetCHANNEL_ID = conn.createStatement();
