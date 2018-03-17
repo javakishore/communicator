@@ -877,7 +877,7 @@ public class CategoryController {
 			conn = DBConnection.getConnection();
 			 User user1 = (User) session.getAttribute("user");
 			 String strUserName=user1.getUserName();
-			// String strUserName=request.getParameter("userName");
+
 			 String sql="";
 			 if(strUserName.equalsIgnoreCase("admin")|| strUserName.equalsIgnoreCase("banca"))
 			 {
@@ -886,11 +886,12 @@ public class CategoryController {
 			 else{
 				 sql=" select a.categoryid,a.categoryname,a.category_name_bhasa,a.category_image,a.isapproved,a.action from category a where nvl(a.isapproved,0) = 0  order by a.categoryid desc";	 
 			 }
-			//String sql=" select a.categoryid,a.categoryname,a.category_name_bhasa,a.category_image,a.isapproved,a.action from category a where nvl(a.isapproved,0) = 0 and a.username='"+strUserName+"' order by a.categoryid";
+			
 			Statement stmt = conn.createStatement();
 			ResultSet resultSet = stmt.executeQuery(sql);
-			System.out.println("sql666666" + sql);
+			System.out.println("pendingcategory >> SQL >>" + sql);
 			while (resultSet.next()) {
+				
 				int categoryId = resultSet.getInt("categoryid");
 				int action = resultSet.getInt("action");
 				String categoryName = String.valueOf(resultSet.getString("categoryname"));
@@ -898,6 +899,8 @@ public class CategoryController {
 				String category_image = String.valueOf(resultSet.getString("category_image"));
 				String isapproved = String.valueOf(resultSet.getInt("isapproved")).equalsIgnoreCase("0") ? "Pending" : "Approved";
 			
+				System.out.println("category id="+categoryId+" category name "+categoryName);
+				
 				categoryList.add(new Category(categoryId, categoryName, isapproved,category_name_bhasa,category_image,action));
 	
 			}
@@ -906,7 +909,7 @@ public class CategoryController {
 			
 			model.addAttribute("category", new Category());
 		}catch(Exception e){
-			
+			e.printStackTrace();
 		}
 	
 		return "pendingCategory";

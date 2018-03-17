@@ -134,6 +134,31 @@ public class LoginController {
         }finally{
 			DBConnection.closeConnection(conn);
 		}
+	}		
+	public int getUserid(String username) throws ClassNotFoundException, SQLException{
+		
+		//String sqlGetCHANNEL_ID = null;
+        String sql = "";
+       // ArrayList<Integer> CHANNEL_IDs = new ArrayList<Integer>();
+        System.out.println("Call Update");
+        Connection conn = null;
+        try{
+            conn = DBConnection.getConnection();
+           // System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=in Select Userid");
+            sql = "select * from user_m where USERNAME='" + username + "'";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet resultSet = stmt.executeQuery(sql);
+           
+            
+            while (resultSet.next()) {
+            	return resultSet.getInt("USERID");
+            }
+        }catch(Exception e){
+        	e.printStackTrace();
+        }finally{
+			DBConnection.closeConnection(conn);
+		}
+        return 0;
 	}
 	
 	public void updateCHANNEL_ID(){
@@ -190,7 +215,7 @@ public class LoginController {
 	                while (resultSetCount.next()) {
 	                	count = resultSetCount.getInt("count");
 	                }
-	                
+	                testuserid = getUserid(username);
 	                if (count == 0){
 		                String sqlRegisterUser = "INSERT INTO USER_M (USERID, USERNAME, USERTYPE, LANG) VALUES (USER_M_SEQ.nextval, ?, 'user', '1')";
 		                PreparedStatement stmtRegisterUser = conn.prepareStatement(sqlRegisterUser);
@@ -255,6 +280,62 @@ public class LoginController {
 		                    stmtSetUserChannel.executeUpdate();
 		                }
 	                
+	                }else {
+	                	if("DA".equals(channel))
+	                		channel = "PBTB";
+	                	if (leaderFlag.equalsIgnoreCase("true")) {
+		                    sqlGetCHANNEL_ID = "Select CHANNELID from CHANNEL where upper(CHANNELNAME)=upper('" + channel + " leaders" + "')";
+		                    stmtGetCHANNEL_ID = conn.createStatement();
+		                    resultSetGetCHANNEL_ID = stmtGetCHANNEL_ID.executeQuery(sqlGetCHANNEL_ID);
+		                    
+		                    while (resultSetGetCHANNEL_ID.next()) {
+		                        CHANNEL_IDs.add(resultSetGetCHANNEL_ID.getInt("CHANNELID"));
+		                    }
+		                    
+		                    sqlGetCHANNEL_ID = null;
+	
+		                    sqlGetCHANNEL_ID = "Select CHANNELID from CHANNEL where upper(CHANNELNAME)=upper('" + channel + " agents" + "')";
+		                    Statement stmtGetCHANNEL_ID2 = conn.createStatement();
+		                    ResultSet resultSetGetCHANNEL_IDAgent = stmtGetCHANNEL_ID2.executeQuery(sqlGetCHANNEL_ID);
+		                    while (resultSetGetCHANNEL_IDAgent.next()) {
+		                        CHANNEL_IDs.add(resultSetGetCHANNEL_IDAgent.getInt("CHANNELID"));
+		                        System.out.println("##############################################################################Selected Chanel id");
+		                    }
+		                    
+		                } else {
+		                	
+		                    sqlGetCHANNEL_ID = "Select CHANNELID from CHANNEL where upper(CHANNELNAME)=upper('" + channel + " agents" + "')";
+		                    Statement stmtGetCHANNEL_ID2 = conn.createStatement();
+		                    ResultSet resultSetGetCHANNEL_IDAgent = stmtGetCHANNEL_ID2.executeQuery(sqlGetCHANNEL_ID);
+		                    while (resultSetGetCHANNEL_IDAgent.next()) {
+		                        CHANNEL_IDs.add(resultSetGetCHANNEL_IDAgent.getInt("CHANNELID"));
+		                        System.out.println("##############################################################################Selected Chanel id");
+		                    }
+		                }
+		                
+		                
+		                //chg.Bilal.13-Feb-2017 17:09.Refactoring code to add sequence for user_channel_id 
+		                for (int i = 0; i < CHANNEL_IDs.size(); ++i) {
+		                	PreparedStatement channelCodeUpdStmt = conn.prepareStatement("select USER_CHANNEL_ID from user_channel where user_id="+testuserid+" and CHANNEL_ID="+CHANNEL_IDs.get(i));
+		                	ResultSet channelCodeUpdRs = channelCodeUpdStmt.executeQuery();
+		                	int userChannelId = 0;
+		                	if(channelCodeUpdRs.next())
+		                		userChannelId = channelCodeUpdRs.getInt(1);
+		                	if(userChannelId > 0) {
+		                		String sqlSetUserChannel = "update user_channel set channelcode='"+channelCode+"' where user_channel_id ="+userChannelId;
+			                    PreparedStatement stmtSetUserChannel = conn.prepareStatement(sqlSetUserChannel);
+			                   
+			                    stmtSetUserChannel.executeUpdate();
+		                	}else {
+			                    String sqlSetUserChannel = "INSERT INTO USER_CHANNEL (USER_CHANNEL_ID, USER_ID, CHANNEL_ID, CHANNELCODE) VALUES ((select max(user_channel_id)+1 from USER_CHANNEL), ?, ?,?)";
+			                    PreparedStatement stmtSetUserChannel = conn.prepareStatement(sqlSetUserChannel);
+			                   
+			                    stmtSetUserChannel.setInt(1, testuserid);
+			                    stmtSetUserChannel.setInt(2, (Integer)CHANNEL_IDs.get(i));
+			                    stmtSetUserChannel.executeUpdate();
+		                	}
+		                }
+	                	
 	                }
 	            }
 	            
